@@ -1,0 +1,2863 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)file:///C:/Users/Administrator/Downloads/petretention%20(4).html -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PetRetention · 宠物垂类选品中台 v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="./PetRetention · 宠物垂类选品中台 v3_files/css2" rel="stylesheet">
+<link rel="stylesheet" href="./PetRetention · 宠物垂类选品中台 v3_files/all.min.css">
+<script src="./PetRetention · 宠物垂类选品中台 v3_files/chart.umd.min.js.下载"></script>
+<style>
+  :root{
+    --bg-0:#070a14;
+    --bg-1:#0c1220;
+    --bg-2:#121a2d;
+    --surface:rgba(20,28,45,.55);
+    --surface-hi:rgba(28,38,60,.75);
+    --border:#1f2a44;
+    --border-hi:#2a3a5c;
+    --line:#1a2238;
+
+    --cyan:#06d4f0;
+    --cyan-dim:#0891a8;
+    --cyan-glow:rgba(6,212,240,.18);
+
+    --amber:#f5a623;
+    --amber-dim:#b8761a;
+    --amber-glow:rgba(245,166,35,.16);
+
+    --pink:#ec4899;
+    --emerald:#10b981;
+    --rose:#f43f5e;
+    --violet:#8b5cf6;
+
+    --text-1:#e6edf7;
+    --text-2:#9aa8c1;
+    --text-3:#5c6b86;
+
+    --r-sm:8px;
+    --r-md:14px;
+    --r-lg:20px;
+    --r-xl:28px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family:'DM Sans','Noto Serif SC',system-ui,sans-serif;
+    color:var(--text-1);
+    background:
+      radial-gradient(900px 600px at 12% 0%, rgba(6,212,240,.07), transparent 60%),
+      radial-gradient(700px 500px at 92% 100%, rgba(245,166,35,.06), transparent 60%),
+      linear-gradient(180deg, var(--bg-0), var(--bg-1));
+    background-attachment:fixed;
+    font-size:14px;
+    line-height:1.55;
+    overflow:hidden;
+  }
+  /* ============ Scrollbar ============ */
+  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:#1c2740;border-radius:8px}
+  ::-webkit-scrollbar-thumb:hover{background:#2a3a5c}
+
+  /* ============ Layout ============ */
+  .app{display:flex;height:100vh}
+  .sidebar{
+    width:248px;
+    flex:none;
+    background:linear-gradient(180deg, rgba(8,12,22,.92), rgba(8,12,22,.85));
+    backdrop-filter:blur(20px);
+    border-right:1px solid var(--line);
+    display:flex;flex-direction:column;
+    padding:22px 0 14px;
+    position:relative;
+  }
+  .sidebar::after{
+    content:"";position:absolute;right:-1px;top:18%;height:64%;width:1px;
+    background:linear-gradient(180deg, transparent, var(--cyan), transparent);
+    opacity:.35;
+  }
+  .brand{padding:0 22px 22px;border-bottom:1px solid var(--line)}
+  .brand-row{display:flex;align-items:center;gap:10px}
+  .brand-mark{
+    width:36px;height:36px;border-radius:10px;
+    background:linear-gradient(135deg,var(--cyan),var(--violet));
+    display:grid;place-items:center;color:#001018;font-weight:900;
+    box-shadow:0 0 18px var(--cyan-glow), inset 0 0 0 1px rgba(255,255,255,.18);
+    font-family:'Noto Serif SC',serif;font-size:18px;
+  }
+  .brand-name{font-family:'Noto Serif SC',serif;font-weight:900;font-size:18px;letter-spacing:.5px}
+  .brand-name em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .brand-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-3);margin-top:4px;letter-spacing:1px}
+
+  .nav-group{padding:4px 14px 6px;border-bottom:1px solid var(--line)}
+  .nav-group:last-of-type{border-bottom:none}
+  .nav-group-title{
+    font-family:'Noto Serif SC',serif;font-size:15px;font-weight:600;
+    color:var(--text-1);padding:14px 10px 12px;
+    display:flex;align-items:center;gap:12px;
+    cursor:pointer;user-select:none;
+    transition:color .15s ease;
+  }
+  .nav-group-title:hover{color:var(--cyan)}
+  .nav-group-title .group-icon{
+    width:22px;height:22px;border-radius:6px;display:grid;place-items:center;
+    background:rgba(6,212,240,.10);color:var(--cyan);font-size:11px;
+    flex-shrink:0;
+  }
+  .nav-group-title .group-name{flex:1}
+  .nav-group-title .chevron{
+    margin-left:auto;font-size:11px;color:var(--text-3);
+    transition:transform .25s ease;
+  }
+  .nav-group.collapsed .chevron{transform:rotate(180deg)}
+  .nav-sub-divider{
+    display:flex;align-items:center;gap:10px;
+    padding:2px 10px 10px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;color:var(--text-3);
+    letter-spacing:2px;text-transform:uppercase;
+  }
+  .nav-sub-divider::before,.nav-sub-divider::after{
+    content:"";flex:1;height:1px;background:var(--line);
+  }
+  .nav-items-wrap{
+    overflow:hidden;
+    transition:max-height .3s ease, opacity .22s ease;
+    max-height:500px;opacity:1;
+  }
+  .nav-group.collapsed .nav-items-wrap{max-height:0;opacity:0;pointer-events:none}
+  .nav-menu{flex:1;overflow-y:auto;padding-bottom:8px}
+  .nav-item{
+    display:flex;align-items:center;gap:12px;
+    padding:10px 14px;margin:2px 6px;
+    border-radius:10px;cursor:pointer;
+    color:var(--text-2);font-weight:500;font-size:13.5px;
+    transition:all .18s ease;position:relative;
+  }
+  .nav-item i{width:18px;text-align:center;font-size:14px;color:var(--text-3)}
+  .nav-item:hover{background:rgba(28,38,60,.5);color:var(--text-1)}
+  .nav-item:hover i{color:var(--cyan)}
+  .nav-item.active{
+    background:linear-gradient(90deg,rgba(6,212,240,.14),rgba(6,212,240,.02));
+    color:var(--cyan);
+  }
+  .nav-item.active i{color:var(--cyan)}
+  .nav-item.active::before{
+    content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;
+    background:var(--cyan);border-radius:0 4px 4px 0;
+    box-shadow:0 0 8px var(--cyan);
+  }
+  .badge-new{
+    font-family:'JetBrains Mono',monospace;font-size:9px;
+    background:var(--amber);color:#1a0f00;padding:1px 6px;
+    border-radius:4px;font-weight:700;margin-left:auto;letter-spacing:.5px;
+  }
+  .sidebar-foot{
+    padding:14px 18px;margin:8px 14px 0;border-top:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-3);line-height:1.7;
+  }
+  .pulse-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--emerald);box-shadow:0 0 6px var(--emerald);animation:pulse 1.8s infinite;margin-right:6px;vertical-align:middle}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  /* ============ Main ============ */
+  .main{flex:1;overflow-y:auto;padding:0}
+  .topbar{
+    position:sticky;top:0;z-index:20;
+    display:flex;align-items:center;gap:14px;
+    padding:16px 28px;
+    background:linear-gradient(180deg, rgba(7,10,20,.92), rgba(7,10,20,.7));
+    backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line);
+  }
+  .crumb{font-family:'Noto Serif SC',serif;font-weight:700;font-size:18px;color:var(--text-1)}
+  .crumb small{font-family:'DM Sans',sans-serif;color:var(--text-3);font-weight:400;font-size:12px;margin-left:8px}
+  .top-search{
+    margin-left:auto;display:flex;align-items:center;gap:8px;
+    background:var(--surface);border:1px solid var(--border);border-radius:10px;
+    padding:8px 14px;min-width:280px;
+  }
+  .top-search i{color:var(--text-3)}
+  .top-search input{flex:1;background:transparent;border:none;color:var(--text-1);outline:none;font-family:inherit;font-size:13px}
+  .top-search kbd{
+    font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-3);
+    background:#0c1424;border:1px solid var(--border);padding:2px 6px;border-radius:4px;
+  }
+  .top-actions{display:flex;gap:8px;align-items:center}
+  .icon-btn{
+    width:36px;height:36px;border-radius:10px;display:grid;place-items:center;
+    background:var(--surface);border:1px solid var(--border);color:var(--text-2);
+    cursor:pointer;transition:.18s;position:relative;
+  }
+  .icon-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+  .icon-btn .dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--rose);box-shadow:0 0 6px var(--rose)}
+  .user-chip{
+    display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;
+    background:var(--surface);border:1px solid var(--border);border-radius:24px;cursor:pointer;
+  }
+  .user-chip:hover{border-color:var(--border-hi)}
+  .user-ava{
+    width:28px;height:28px;border-radius:50%;
+    background:linear-gradient(135deg,var(--amber),var(--pink));
+    display:grid;place-items:center;color:#fff;font-weight:700;font-size:12px;
+  }
+  .user-meta{font-size:12px;line-height:1.2}
+  .user-meta b{display:block;color:var(--text-1);font-weight:600}
+  .user-meta span{color:var(--text-3);font-size:10px;font-family:'JetBrains Mono',monospace}
+
+  .container{padding:24px 28px 60px}
+
+  /* ============ Components ============ */
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--r-lg);
+    padding:20px;
+    position:relative;
+    transition:.2s;
+  }
+  .card:hover{border-color:var(--border-hi)}
+  .card.glow:hover{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan), 0 10px 30px -10px var(--cyan-glow)}
+  .card-head{
+    display:flex;align-items:center;gap:10px;margin-bottom:16px;
+  }
+  .card-title{
+    font-family:'Noto Serif SC',serif;font-weight:700;font-size:16px;color:var(--text-1);
+    display:flex;align-items:center;gap:10px;
+  }
+  .card-title .accent{
+    width:3px;height:18px;background:var(--cyan);border-radius:2px;
+    box-shadow:0 0 8px var(--cyan);
+  }
+  .card-title .accent.amber{background:var(--amber);box-shadow:0 0 8px var(--amber)}
+  .card-title .accent.pink{background:var(--pink);box-shadow:0 0 8px var(--pink)}
+  .card-sub{color:var(--text-3);font-size:12px;margin-left:auto;font-family:'JetBrains Mono',monospace}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:8px 16px;border-radius:10px;cursor:pointer;
+    font-family:inherit;font-size:13px;font-weight:500;
+    border:1px solid var(--border);background:var(--surface);color:var(--text-1);
+    transition:.18s;
+  }
+  .btn:hover{border-color:var(--border-hi);background:var(--surface-hi)}
+  .btn.primary{
+    background:linear-gradient(135deg,var(--cyan),var(--cyan-dim));
+    border-color:transparent;color:#001018;font-weight:700;
+    box-shadow:0 4px 14px -2px var(--cyan-glow);
+  }
+  .btn.primary:hover{box-shadow:0 6px 20px -2px rgba(6,212,240,.45)}
+  .btn.amber{
+    background:linear-gradient(135deg,var(--amber),var(--amber-dim));
+    border-color:transparent;color:#1a0f00;font-weight:700;
+    box-shadow:0 4px 14px -2px var(--amber-glow);
+  }
+  .btn.ghost{background:transparent}
+  .btn.sm{padding:5px 10px;font-size:11.5px;border-radius:7px}
+
+  .pill{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;
+    border:1px solid;background:transparent;
+  }
+  .pill.cyan{border-color:rgba(6,212,240,.4);color:var(--cyan);background:rgba(6,212,240,.08)}
+  .pill.amber{border-color:rgba(245,166,35,.4);color:var(--amber);background:rgba(245,166,35,.08)}
+  .pill.pink{border-color:rgba(236,72,153,.4);color:var(--pink);background:rgba(236,72,153,.08)}
+  .pill.emerald{border-color:rgba(16,185,129,.4);color:var(--emerald);background:rgba(16,185,129,.08)}
+  .pill.rose{border-color:rgba(244,63,94,.4);color:var(--rose);background:rgba(244,63,94,.08)}
+  .pill.violet{border-color:rgba(139,92,246,.4);color:var(--violet);background:rgba(139,92,246,.08)}
+  .pill.muted{border-color:var(--border);color:var(--text-3)}
+
+  .mono{font-family:'JetBrains Mono',monospace}
+  .serif{font-family:'Noto Serif SC',serif}
+  .num{font-family:'JetBrains Mono',monospace;font-weight:700}
+  .text-cyan{color:var(--cyan)} .text-amber{color:var(--amber)} .text-pink{color:var(--pink)}
+  .text-emerald{color:var(--emerald)} .text-rose{color:var(--rose)} .text-2{color:var(--text-2)} .text-3{color:var(--text-3)}
+
+  input[type=text],input[type=number],select,textarea{
+    background:#0a111f;border:1px solid var(--border);
+    padding:9px 14px;border-radius:10px;color:var(--text-1);
+    font-family:inherit;font-size:13px;outline:none;transition:.18s;
+  }
+  input[type=text]:focus,input[type=number]:focus,select:focus,textarea:focus{
+    border-color:var(--cyan);box-shadow:0 0 0 3px var(--cyan-glow);
+  }
+  label{font-size:12px;color:var(--text-2);display:block;margin-bottom:6px;font-weight:500}
+
+  /* ============ Pages ============ */
+  .page{display:none;animation:fadeIn .35s ease}
+  .page.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ============ Dashboard KPIs ============ */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}
+  .kpi{
+    position:relative;overflow:hidden;
+    padding:18px 18px 16px;
+    border-radius:var(--r-lg);
+    background:linear-gradient(135deg, rgba(20,28,45,.7), rgba(12,18,32,.7));
+    border:1px solid var(--border);
+  }
+  .kpi-bg{
+    position:absolute;right:-20px;top:-20px;font-size:120px;opacity:.06;color:var(--cyan);
+    transform:rotate(-12deg);
+  }
+  .kpi-bg.amber{color:var(--amber)} .kpi-bg.pink{color:var(--pink)} .kpi-bg.emerald{color:var(--emerald)}
+  .kpi-label{font-size:11.5px;color:var(--text-3);text-transform:uppercase;letter-spacing:1.2px;font-family:'JetBrains Mono',monospace}
+  .kpi-value{
+    font-family:'Noto Serif SC',serif;font-weight:900;font-size:32px;line-height:1.1;
+    color:var(--text-1);margin:8px 0 6px;
+  }
+  .kpi-value small{font-size:14px;color:var(--text-2);font-weight:500;margin-left:4px}
+  .kpi-foot{font-size:12px;color:var(--text-2);display:flex;align-items:center;gap:6px}
+  .delta{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12px}
+  .delta.up{color:var(--emerald)} .delta.down{color:var(--rose)}
+
+  /* ============ Race Track Cards (爆款赛道) ============ */
+  .race-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px}
+  .race{
+    padding:18px;border-radius:var(--r-lg);
+    border:1px solid var(--border);background:var(--surface);
+    position:relative;overflow:hidden;
+    transition:.2s;cursor:pointer;
+  }
+  .race:hover{border-color:var(--cyan);transform:translateY(-2px)}
+  .race-emoji{font-size:34px;line-height:1;margin-bottom:6px}
+  .race-name{font-family:'Noto Serif SC',serif;font-weight:700;font-size:16px;margin-bottom:4px}
+  .race-stats{display:flex;gap:14px;font-size:11.5px;color:var(--text-2);margin-top:10px;flex-wrap:wrap}
+  .race-stats b{color:var(--text-1);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px}
+  .race-bar{
+    height:4px;background:#0a111f;border-radius:2px;overflow:hidden;margin-top:12px;
+  }
+  .race-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--amber));border-radius:2px}
+
+  /* ============ Onboarding (新手起步) ============ */
+  .ob-hero{
+    padding:28px;border-radius:var(--r-xl);
+    background:
+      radial-gradient(600px 200px at 0% 0%, rgba(6,212,240,.15), transparent 70%),
+      radial-gradient(500px 200px at 100% 100%, rgba(245,166,35,.12), transparent 70%),
+      linear-gradient(135deg, rgba(20,28,45,.85), rgba(12,18,32,.85));
+    border:1px solid var(--border);
+    margin-bottom:24px;position:relative;overflow:hidden;
+  }
+  .ob-hero h1{font-family:'Noto Serif SC',serif;font-weight:900;font-size:30px;margin-bottom:8px;letter-spacing:.5px}
+  .ob-hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--cyan),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .ob-hero p{color:var(--text-2);font-size:14px;max-width:640px;margin-bottom:18px}
+  .ob-paw{position:absolute;right:24px;top:50%;transform:translateY(-50%);font-size:140px;opacity:.05;color:var(--amber)}
+  .ob-cta{display:flex;gap:10px;flex-wrap:wrap}
+
+  .step-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:22px}
+  .step{
+    padding:16px;border-radius:var(--r-md);
+    background:var(--surface);border:1px solid var(--border);
+    position:relative;
+  }
+  .step-num{
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;
+    color:var(--cyan);background:rgba(6,212,240,.1);
+    padding:2px 7px;border-radius:4px;display:inline-block;
+  }
+  .step-title{font-family:'Noto Serif SC',serif;font-weight:700;font-size:14px;margin:8px 0 4px}
+  .step-desc{font-size:11.5px;color:var(--text-2);line-height:1.5}
+  .step.done{border-color:rgba(16,185,129,.35);background:linear-gradient(135deg,rgba(16,185,129,.08),transparent)}
+  .step.done .step-num{background:rgba(16,185,129,.15);color:var(--emerald)}
+  .step.now{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber),0 8px 24px -6px var(--amber-glow)}
+  .step.now .step-num{background:var(--amber);color:#1a0f00}
+  .step .check{position:absolute;top:14px;right:14px;color:var(--emerald);font-size:14px}
+
+  /* ============ Pet Matrix ============ */
+  .matrix-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .pet-card{
+    padding:18px;border-radius:var(--r-lg);
+    background:var(--surface);border:1px solid var(--border);
+    transition:.2s;position:relative;overflow:hidden;
+  }
+  .pet-card:hover{border-color:var(--amber);transform:translateY(-2px)}
+  .pet-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .pet-avatar{
+    width:48px;height:48px;border-radius:14px;
+    background:linear-gradient(135deg,rgba(6,212,240,.18),rgba(245,166,35,.14));
+    border:1px solid var(--border);
+    display:grid;place-items:center;font-size:24px;
+  }
+  .pet-name{font-family:'Noto Serif SC',serif;font-weight:700;font-size:17px}
+  .pet-trait{font-size:11px;color:var(--text-3);font-family:'JetBrains Mono',monospace;letter-spacing:.5px}
+  .sku-list{list-style:none;padding:0;font-size:12.5px}
+  .sku-list li{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:8px 0;border-bottom:1px dashed var(--line);
+  }
+  .sku-list li:last-child{border-bottom:none}
+  .sku-list li span:first-child{color:var(--text-2)}
+  .sku-meta{display:flex;gap:6px;align-items:center}
+  .heart{display:inline-flex;align-items:center;gap:2px;color:var(--pink);font-size:11px}
+
+  /* ============ Price Compare ============ */
+  .pc-search{
+    display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center;
+  }
+  .pc-search input{flex:1;min-width:240px}
+  .pc-table{
+    width:100%;border-collapse:separate;border-spacing:0;
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+    overflow:hidden;
+  }
+  .pc-table th,.pc-table td{padding:12px 14px;text-align:left;font-size:13px;border-bottom:1px solid var(--line)}
+  .pc-table th{
+    background:#0c1424;color:var(--text-3);font-weight:600;font-size:11px;
+    text-transform:uppercase;letter-spacing:1px;font-family:'JetBrains Mono',monospace;
+  }
+  .pc-table tr:last-child td{border-bottom:none}
+  .pc-table tr:hover td{background:rgba(6,212,240,.04)}
+  .platform-chip{display:inline-flex;align-items:center;gap:8px}
+  .platform-chip .pl-ico{
+    width:28px;height:28px;border-radius:7px;display:grid;place-items:center;
+    background:#0a111f;border:1px solid var(--border);font-size:14px;
+  }
+  .price-cell{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px}
+  .price-cell.best{color:var(--emerald)}
+  .price-cell.bad{color:var(--text-3)}
+  .save-bar{
+    height:6px;background:#0a111f;border-radius:3px;overflow:hidden;margin-top:4px;width:120px;
+  }
+  .save-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--emerald),var(--cyan));border-radius:3px}
+
+  /* ============ Profit Engine ============ */
+  .pe-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
+  .pe-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .pe-form .full{grid-column:span 2}
+  .pe-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px dashed var(--line);font-size:13px}
+  .pe-row:last-child{border-bottom:none}
+  .pe-row .lbl{color:var(--text-2)}
+  .pe-row .val{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--text-1)}
+  .pe-row.total{padding-top:14px;margin-top:6px;border-top:1px solid var(--border);border-bottom:none}
+  .pe-row.total .lbl{color:var(--text-1);font-weight:700;font-size:14px}
+  .pe-row.total .val{font-size:20px;color:var(--emerald)}
+  .pe-row.danger .val{color:var(--rose)}
+  .verdict{
+    margin-top:14px;padding:14px;border-radius:var(--r-md);
+    background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(6,212,240,.06));
+    border:1px solid rgba(16,185,129,.3);
+  }
+  .verdict.warn{
+    background:linear-gradient(135deg,rgba(245,166,35,.12),rgba(244,63,94,.06));
+    border-color:rgba(245,166,35,.3);
+  }
+  .verdict.bad{
+    background:linear-gradient(135deg,rgba(244,63,94,.14),rgba(244,63,94,.04));
+    border-color:rgba(244,63,94,.35);
+  }
+  .verdict-head{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:6px;font-family:'Noto Serif SC',serif}
+
+  /* ============ Trend Radar ============ */
+  .trend-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;margin-bottom:18px}
+  .signal{
+    padding:12px 14px;border-radius:var(--r-md);
+    background:#0a111f;border:1px solid var(--border);
+    border-left:3px solid var(--cyan);
+    margin-bottom:10px;display:flex;align-items:center;gap:12px;
+    transition:.18s;
+  }
+  .signal:hover{border-color:var(--cyan);transform:translateX(2px)}
+  .signal.hot{border-left-color:var(--rose)}
+  .signal.amber{border-left-color:var(--amber)}
+  .signal-ico{
+    width:34px;height:34px;border-radius:9px;
+    background:rgba(6,212,240,.1);display:grid;place-items:center;font-size:14px;color:var(--cyan);
+    flex:none;
+  }
+  .signal.hot .signal-ico{background:rgba(244,63,94,.1);color:var(--rose)}
+  .signal.amber .signal-ico{background:rgba(245,166,35,.1);color:var(--amber)}
+  .signal-body{flex:1;min-width:0}
+  .signal-title{font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:2px}
+  .signal-meta{font-size:11px;color:var(--text-3);font-family:'JetBrains Mono',monospace}
+  .signal-delta{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:var(--emerald)}
+
+  /* ============ Repurchase Card ============ */
+  .repurchase-result{
+    background:linear-gradient(135deg,rgba(6,212,240,.08),rgba(139,92,246,.04));
+    border:1px solid rgba(6,212,240,.2);border-radius:var(--r-md);
+    padding:16px;
+  }
+  .gauge{
+    display:flex;align-items:center;gap:16px;
+  }
+  .gauge-svg{flex:none}
+  .gauge-meta{flex:1}
+  .gauge-label{font-size:11.5px;color:var(--text-3);text-transform:uppercase;letter-spacing:1.5px;font-family:'JetBrains Mono',monospace}
+  .gauge-score{font-family:'Noto Serif SC',serif;font-weight:900;font-size:36px;line-height:1;margin:4px 0}
+  .repurchase-axes{margin-top:14px}
+  .axis{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:12px}
+  .axis-label{width:80px;color:var(--text-2)}
+  .axis-bar{flex:1;height:6px;background:#0a111f;border-radius:3px;overflow:hidden}
+  .axis-bar i{display:block;height:100%;border-radius:3px}
+  .axis-val{width:32px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-2)}
+
+  /* ============ Competitor Belt ============ */
+  .comp-belt{
+    position:relative;height:120px;
+    background:linear-gradient(180deg,transparent,rgba(6,212,240,.02));
+    border:1px solid var(--border);border-radius:var(--r-md);padding:18px 24px;
+  }
+  .belt-track{position:relative;height:8px;background:#0a111f;border-radius:4px;margin-top:24px}
+  .belt-fill{position:absolute;top:0;bottom:0;background:linear-gradient(90deg,var(--emerald),var(--amber),var(--rose));border-radius:4px;opacity:.7}
+  .belt-marker{
+    position:absolute;top:-8px;width:2px;height:24px;background:var(--text-1);
+  }
+  .belt-marker::after{
+    content:attr(data-label);position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+    background:var(--bg-2);border:1px solid var(--border);padding:2px 7px;border-radius:6px;
+    font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-1);white-space:nowrap;
+  }
+  .belt-marker.mine{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+  .belt-marker.mine::after{background:var(--cyan);color:#001018;border-color:var(--cyan);font-weight:700}
+  .belt-labels{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-3);margin-top:10px}
+
+  /* ============ Risk Center ============ */
+  .risk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+  .risk-card{
+    padding:16px;border-radius:var(--r-md);background:var(--surface);
+    border:1px solid var(--border);border-left:4px solid var(--rose);
+  }
+  .risk-card.warn{border-left-color:var(--amber)}
+  .risk-card.info{border-left-color:var(--cyan)}
+  .risk-card h4{font-family:'Noto Serif SC',serif;font-weight:700;font-size:14px;margin-bottom:6px}
+  .risk-card p{font-size:12px;color:var(--text-2);line-height:1.6}
+  .risk-card .tag{margin-top:8px;font-size:11px;color:var(--text-3);font-family:'JetBrains Mono',monospace}
+
+  /* ============ Supplier Chat ============ */
+  .chat-shell{
+    display:flex;height:540px;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:var(--bg-1);
+  }
+  .chat-side{width:280px;flex:none;border-right:1px solid var(--border);background:rgba(10,17,31,.6);display:flex;flex-direction:column}
+  .chat-filter{padding:10px;border-bottom:1px solid var(--line)}
+  .chat-filter input{width:100%;padding:7px 12px;font-size:12px}
+  .chat-list{flex:1;overflow-y:auto}
+  .chat-item{
+    padding:12px 14px;cursor:pointer;border-bottom:1px solid var(--line);
+    display:flex;gap:10px;transition:.15s;
+  }
+  .chat-item:hover{background:rgba(28,38,60,.4)}
+  .chat-item.active{background:linear-gradient(90deg,rgba(6,212,240,.1),transparent);border-left:3px solid var(--cyan);padding-left:11px}
+  .chat-ava{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;background:#0a111f;border:1px solid var(--border);font-size:14px;flex:none}
+  .chat-meta{flex:1;min-width:0}
+  .chat-meta b{display:block;font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:2px;display:flex;align-items:center;gap:6px}
+  .chat-meta span{font-size:11px;color:var(--text-3);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .online-dot{width:6px;height:6px;border-radius:50%;background:var(--emerald);display:inline-block}
+  .online-dot.busy{background:var(--amber)}
+  .chat-main{flex:1;display:flex;flex-direction:column;min-width:0}
+  .chat-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;background:rgba(10,17,31,.4)}
+  .chat-head .chat-ava{width:40px;height:40px}
+  .chat-head-meta b{display:block;font-family:'Noto Serif SC',serif;font-weight:700;font-size:15px}
+  .chat-head-meta span{font-size:11px;color:var(--text-3);font-family:'JetBrains Mono',monospace}
+  .chat-head-actions{margin-left:auto;display:flex;gap:6px}
+  .chat-body{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px}
+  .msg{max-width:72%;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.5}
+  .msg.in{background:#16213a;border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
+  .msg.out{background:linear-gradient(135deg,var(--cyan-dim),#0a5d70);align-self:flex-end;border-bottom-right-radius:4px;color:#fff}
+  .msg-time{font-size:10px;color:var(--text-3);margin-top:4px;font-family:'JetBrains Mono',monospace}
+  .msg.out .msg-time{text-align:right;color:rgba(255,255,255,.6)}
+  .chat-input{padding:12px;border-top:1px solid var(--line);display:flex;gap:8px;background:rgba(10,17,31,.4)}
+  .chat-input input{flex:1}
+  .quick-asks{display:flex;gap:6px;padding:8px 12px;border-top:1px solid var(--line);flex-wrap:wrap}
+  .quick-ask{
+    font-size:11px;padding:4px 10px;border-radius:14px;
+    background:#0a111f;border:1px solid var(--border);color:var(--text-2);cursor:pointer;
+  }
+  .quick-ask:hover{border-color:var(--cyan);color:var(--cyan)}
+
+  /* ============ Orders ============ */
+  .filter-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+  .tab{
+    padding:6px 14px;border-radius:8px;font-size:12.5px;cursor:pointer;
+    border:1px solid var(--border);background:transparent;color:var(--text-2);transition:.15s;font-family:inherit;
+  }
+  .tab:hover{color:var(--text-1);border-color:var(--border-hi)}
+  .tab.active{background:rgba(6,212,240,.12);border-color:var(--cyan);color:var(--cyan)}
+  .tab .count{font-family:'JetBrains Mono',monospace;font-size:10px;background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px;margin-left:5px}
+  .ord-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
+  .ord-table th{
+    text-align:left;padding:10px 12px;font-size:11px;color:var(--text-3);
+    text-transform:uppercase;letter-spacing:1px;font-family:'JetBrains Mono',monospace;
+    border-bottom:1px solid var(--border);
+  }
+  .ord-table td{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
+  .ord-table tr:hover td{background:rgba(6,212,240,.03)}
+  .status-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:14px;font-size:11px;font-weight:600}
+  .st-pay{background:rgba(245,166,35,.15);color:var(--amber)}
+  .st-ship{background:rgba(6,212,240,.15);color:var(--cyan)}
+  .st-recv{background:rgba(16,185,129,.15);color:var(--emerald)}
+  .st-refund{background:rgba(244,63,94,.15);color:var(--rose)}
+  .st-eval{background:rgba(139,92,246,.15);color:var(--violet)}
+
+  /* ============ SLA ============ */
+  .sla-row{display:flex;align-items:center;gap:14px;padding:14px;border-bottom:1px solid var(--line)}
+  .sla-row:last-child{border-bottom:none}
+  .sla-name{flex:1;font-size:14px;display:flex;align-items:center;gap:10px}
+  .sla-metric{
+    display:flex;flex-direction:column;align-items:center;
+    padding:0 14px;border-left:1px solid var(--line);min-width:90px;
+  }
+  .sla-metric small{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;font-family:'JetBrains Mono',monospace;margin-bottom:4px}
+  .sla-metric b{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700}
+  .sla-grade{
+    width:48px;height:48px;border-radius:12px;display:grid;place-items:center;
+    font-family:'Noto Serif SC',serif;font-weight:900;font-size:18px;
+    background:rgba(16,185,129,.12);color:var(--emerald);border:1px solid rgba(16,185,129,.3);
+  }
+  .sla-grade.b{background:rgba(245,166,35,.12);color:var(--amber);border-color:rgba(245,166,35,.3)}
+  .sla-grade.c{background:rgba(244,63,94,.12);color:var(--rose);border-color:rgba(244,63,94,.3)}
+
+  /* ============ Product Discovery ============ */
+  .disc-filters{
+    display:flex;gap:10px;flex-wrap:wrap;padding:14px;background:var(--surface);
+    border:1px solid var(--border);border-radius:var(--r-md);margin-bottom:16px;align-items:center;
+  }
+  .disc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .prod{
+    border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;
+    background:var(--surface);transition:.2s;cursor:pointer;
+  }
+  .prod:hover{border-color:var(--cyan);transform:translateY(-3px);box-shadow:0 12px 30px -10px rgba(0,0,0,.6)}
+  .prod-img{
+    height:120px;display:grid;place-items:center;font-size:50px;
+    background:linear-gradient(135deg,rgba(6,212,240,.08),rgba(245,166,35,.05));
+    border-bottom:1px solid var(--line);position:relative;
+  }
+  .prod-tag{position:absolute;top:8px;left:8px;font-size:10px;padding:2px 7px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-weight:700}
+  .prod-tag.hot{background:var(--rose);color:#fff}
+  .prod-tag.new{background:var(--cyan);color:#001018}
+  .prod-tag.profit{background:var(--amber);color:#1a0f00}
+  .prod-body{padding:12px}
+  .prod-name{font-size:13px;font-weight:600;margin-bottom:6px;color:var(--text-1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .prod-meta{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:11px;color:var(--text-3)}
+  .prod-price{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px;color:var(--amber)}
+  .prod-foot{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-top:1px solid var(--line);font-size:11px;color:var(--text-3);background:rgba(10,17,31,.4)}
+
+  /* ============ Daily Hot Modal ============ */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(4,8,18,.78);backdrop-filter:blur(8px);
+    z-index:999;display:none;align-items:center;justify-content:center;padding:20px;
+    animation:fadeIn .25s ease;
+  }
+  .modal-overlay.show{display:flex}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .modal-box{
+    background:linear-gradient(180deg,#0d1626,#0a111f);
+    border:1px solid var(--border);border-radius:16px;
+    width:min(880px,100%);max-height:88vh;overflow:hidden;
+    box-shadow:0 30px 80px -20px rgba(0,0,0,.9),0 0 0 1px rgba(6,212,240,.15);
+    display:flex;flex-direction:column;
+    animation:slideUp .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .modal-head{
+    padding:20px 24px;border-bottom:1px solid var(--line);
+    background:linear-gradient(135deg,rgba(6,212,240,.10),rgba(245,166,35,.05));
+    display:flex;align-items:center;gap:14px;
+  }
+  .modal-head .icon-box{
+    width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--amber),var(--rose));color:#1a0a00;
+    font-size:18px;box-shadow:0 0 20px rgba(245,166,35,.4);
+  }
+  .modal-title{font-family:'Noto Serif SC',serif;font-weight:900;font-size:20px;color:var(--text-1)}
+  .modal-sub{font-size:12px;color:var(--text-3);margin-top:3px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px}
+  .modal-close{
+    margin-left:auto;width:34px;height:34px;border-radius:8px;border:1px solid var(--line);
+    background:rgba(28,38,60,.5);color:var(--text-2);cursor:pointer;display:grid;place-items:center;
+    transition:.2s;
+  }
+  .modal-close:hover{background:var(--rose);color:#fff;border-color:var(--rose)}
+  .modal-body{padding:20px 24px;overflow-y:auto;flex:1}
+  .modal-foot{
+    padding:14px 24px;border-top:1px solid var(--line);
+    background:rgba(8,14,26,.6);display:flex;align-items:center;gap:12px;
+  }
+  .hot-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+  .hot-card{
+    border:1px solid var(--border);border-radius:12px;padding:14px;
+    background:linear-gradient(135deg,rgba(28,38,60,.4),rgba(10,17,31,.6));
+    display:flex;gap:12px;align-items:flex-start;transition:.2s;position:relative;
+  }
+  .hot-card:hover{border-color:var(--amber);transform:translateY(-2px)}
+  .hot-card .hot-emoji{
+    width:56px;height:56px;border-radius:10px;display:grid;place-items:center;
+    background:rgba(245,166,35,.10);font-size:30px;flex-shrink:0;
+    border:1px solid rgba(245,166,35,.20);
+  }
+  .hot-rank{
+    position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;
+    background:var(--rose);color:#fff;display:grid;place-items:center;
+    font-family:'JetBrains Mono',monospace;font-weight:900;font-size:11px;
+    box-shadow:0 0 10px rgba(244,63,94,.5);
+  }
+  .hot-rank.r1{background:linear-gradient(135deg,#ffd700,#f5a623);color:#1a0a00}
+  .hot-rank.r2{background:linear-gradient(135deg,#c0c0c0,#888);color:#1a1a1a}
+  .hot-rank.r3{background:linear-gradient(135deg,#cd7f32,#8b4513);color:#fff}
+  .hot-body{flex:1;min-width:0}
+  .hot-name{font-weight:600;font-size:14px;color:var(--text-1);margin-bottom:6px}
+  .hot-stats{font-size:11px;color:var(--text-3);font-family:'JetBrains Mono',monospace;line-height:1.7}
+  .hot-stats b{color:var(--cyan);font-weight:700}
+  .hot-add{
+    margin-top:8px;display:inline-flex;align-items:center;gap:6px;
+    padding:5px 11px;border-radius:6px;font-size:11px;cursor:pointer;
+    background:rgba(6,212,240,.10);color:var(--cyan);border:1px solid rgba(6,212,240,.30);
+    transition:.18s;font-weight:600;
+  }
+  .hot-add:hover{background:var(--cyan);color:#001018}
+  .hot-add.added{background:rgba(16,185,129,.15);color:var(--emerald);border-color:rgba(16,185,129,.3)}
+  .hot-add.added::before{content:"✓ "}
+
+  /* topbar selection cart */
+  .selection-badge{
+    display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:8px;
+    background:rgba(245,166,35,.10);border:1px solid rgba(245,166,35,.25);
+    color:var(--amber);font-size:12px;cursor:pointer;transition:.2s;font-weight:600;
+  }
+  .selection-badge:hover{background:rgba(245,166,35,.18)}
+  .selection-badge .count{
+    background:var(--amber);color:#1a0a00;border-radius:10px;
+    padding:1px 7px;font-family:'JetBrains Mono',monospace;font-weight:900;font-size:11px;
+  }
+
+  /* ============ Product Detail Page ============ */
+  .pd-head{
+    display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;
+    padding:20px;background:linear-gradient(135deg,rgba(6,212,240,.06),rgba(245,166,35,.04));
+    border:1px solid var(--border);border-radius:var(--r-md);margin-bottom:16px;
+  }
+  .pd-back{
+    display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:8px;
+    background:rgba(28,38,60,.5);border:1px solid var(--line);color:var(--text-2);
+    cursor:pointer;font-size:13px;transition:.2s;font-weight:500;
+  }
+  .pd-back:hover{background:var(--cyan);color:#001018;border-color:var(--cyan)}
+  .pd-img{
+    width:96px;height:96px;border-radius:14px;display:grid;place-items:center;
+    font-size:54px;background:rgba(28,38,60,.5);border:1px solid var(--border);
+  }
+  .pd-info h1{font-family:'Noto Serif SC',serif;font-size:24px;font-weight:900;color:var(--text-1);margin-bottom:8px}
+  .pd-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--text-3)}
+  .pd-price{
+    font-family:'JetBrains Mono',monospace;font-weight:900;font-size:32px;color:var(--amber);
+    line-height:1;
+  }
+  .pd-price small{font-size:13px;color:var(--text-3);font-weight:500;margin-left:6px}
+  .pd-actions{display:flex;flex-direction:column;gap:8px}
+  .pd-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+  .pd-kpi{
+    padding:16px;background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--r-md);position:relative;overflow:hidden;
+  }
+  .pd-kpi::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cyan);
+  }
+  .pd-kpi.amber::before{background:var(--amber)}
+  .pd-kpi.emerald::before{background:var(--emerald)}
+  .pd-kpi.rose::before{background:var(--rose)}
+  .pd-kpi .pd-kpi-lbl{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;font-family:'JetBrains Mono',monospace;margin-bottom:8px}
+  .pd-kpi .pd-kpi-val{font-family:'JetBrains Mono',monospace;font-weight:900;font-size:24px;color:var(--text-1);line-height:1}
+  .pd-kpi .pd-kpi-val small{font-size:13px;color:var(--text-3);font-weight:500;margin-left:4px}
+  .pd-kpi .pd-kpi-delta{font-size:11px;margin-top:6px;font-family:'JetBrains Mono',monospace}
+  .pd-grid-2{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;margin-bottom:16px;align-items:stretch}
+  .pd-grid-2 > .card{display:flex;flex-direction:column}
+  .pd-chart-wrap{position:relative;height:160px;width:100%}
+  .pd-chart-wrap > canvas{position:absolute;inset:0;width:100% !important;height:100% !important}
+  .pd-chart-foot{
+    display:flex;gap:14px;margin-top:12px;padding-top:10px;
+    border-top:1px dashed var(--line);font-size:12px;color:var(--text-2);
+    flex-wrap:wrap;
+  }
+  .pd-comp-table{width:100%;border-collapse:separate;border-spacing:0}
+  .pd-comp-table th{padding:10px 12px;text-align:left;font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;background:rgba(28,38,60,.3)}
+  .pd-comp-table td{padding:11px 12px;font-size:13px;border-bottom:1px solid var(--line);color:var(--text-1)}
+  .pd-comp-table td:nth-child(2),.pd-comp-table td:nth-child(3){font-family:'JetBrains Mono',monospace}
+  .pd-comp-table tr:hover td{background:rgba(28,38,60,.3)}
+  .pd-rank-badge{
+    width:24px;height:24px;border-radius:50%;display:inline-grid;place-items:center;
+    font-family:'JetBrains Mono',monospace;font-weight:900;font-size:11px;
+    background:rgba(28,38,60,.6);color:var(--text-3);
+  }
+  .pd-rank-badge.r1{background:linear-gradient(135deg,#ffd700,#f5a623);color:#1a0a00}
+  .pd-rank-badge.r2{background:linear-gradient(135deg,#c0c0c0,#888);color:#1a1a1a}
+  .pd-rank-badge.r3{background:linear-gradient(135deg,#cd7f32,#8b4513);color:#fff}
+  .pd-ai{
+    background:linear-gradient(135deg,rgba(139,92,246,.10),rgba(6,212,240,.06));
+    border:1px solid rgba(139,92,246,.25);
+  }
+  .pd-ai-row{display:grid;grid-template-columns:130px 1fr;gap:14px;align-items:flex-start;flex:1}
+  .pd-ai-left{display:flex;flex-direction:column;gap:6px;padding-right:14px;border-right:1px dashed var(--line)}
+  .pd-ai-score{display:flex;align-items:baseline;gap:6px;margin:4px 0 6px}
+  .pd-ai-score b{font-family:'JetBrains Mono',monospace;font-weight:900;font-size:32px;line-height:1;color:var(--text-1)}
+  .pd-ai-score span{font-size:11px}
+  .pd-ai-bar{height:6px;border-radius:3px;background:rgba(28,38,60,.5);overflow:hidden}
+  .pd-ai-bar > div{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--cyan),var(--violet));transition:width .6s ease}
+  .pd-ai-verdict{
+    display:inline-block;padding:3px 10px;border-radius:6px;font-size:11.5px;font-weight:700;
+    font-family:'Noto Serif SC',serif;text-align:center;
+  }
+  .pd-ai-verdict.recommend{background:rgba(16,185,129,.15);color:var(--emerald);border:1px solid rgba(16,185,129,.3)}
+  .pd-ai-verdict.strong{background:rgba(245,166,35,.15);color:var(--amber);border:1px solid rgba(245,166,35,.3)}
+  .pd-ai-verdict.watch{background:rgba(139,92,246,.15);color:var(--violet);border:1px solid rgba(139,92,246,.3)}
+  .pd-ai-verdict.avoid{background:rgba(244,63,94,.15);color:var(--rose);border:1px solid rgba(244,63,94,.3)}
+  .pd-ai-points{font-size:11.5px;line-height:1.55;color:var(--text-2);margin:0;padding:0;max-height:180px;overflow-y:auto}
+  .pd-ai-points li{padding:2px 0;list-style:none;display:flex;gap:6px;align-items:flex-start}
+  .pd-ai-points li::before{content:"▸";color:var(--cyan);flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:10px;margin-top:2px}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- =========== SIDEBAR =========== -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-row">
+        <div class="brand-mark">爪</div>
+        <div>
+          <div class="brand-name">Pet<em>Retention</em></div>
+          <div class="brand-sub">v3.0 · 宠物垂类选品中台</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-menu">
+      <div class="nav-group">
+        <div class="nav-group-title">
+          <span class="group-icon"><i class="fas fa-cube"></i></span>
+          <span class="group-name">核心</span>
+          <i class="chevron fas fa-chevron-up"></i>
+        </div>
+        <div class="nav-items-wrap">
+          <div class="nav-sub-divider">起步必看</div>
+          <div class="nav-item active" data-page="dashboard"><i class="fa-solid fa-gauge-high"></i><span>总览看板</span></div>
+          <div class="nav-item" data-page="quickstart"><i class="fa-solid fa-rocket"></i><span>新手起步</span><span class="badge-new">NEW</span></div>
+        </div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-title">
+          <span class="group-icon"><i class="fas fa-binoculars"></i></span>
+          <span class="group-name">发现机会</span>
+          <i class="chevron fas fa-chevron-up"></i>
+        </div>
+        <div class="nav-items-wrap">
+          <div class="nav-sub-divider">找货机会</div>
+          <div class="nav-item" data-page="discover"><i class="fa-solid fa-shop"></i><span>选品广场</span><span class="badge-new">NEW</span></div>
+          <div class="nav-item" data-page="trend"><i class="fa-solid fa-tower-broadcast"></i><span>趋势雷达</span></div>
+          <div class="nav-item" data-page="matrix"><i class="fa-solid fa-paw"></i><span>宠物矩阵</span></div>
+        </div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-title">
+          <span class="group-icon"><i class="fas fa-balance-scale"></i></span>
+          <span class="group-name">评估决策</span>
+          <i class="chevron fas fa-chevron-up"></i>
+        </div>
+        <div class="nav-items-wrap">
+          <div class="nav-sub-divider">决策辅助</div>
+          <div class="nav-item" data-page="compare"><i class="fa-solid fa-scale-balanced"></i><span>跨平台比价</span><span class="badge-new">NEW</span></div>
+          <div class="nav-item" data-page="profit"><i class="fa-solid fa-coins"></i><span>真实利润</span></div>
+          <div class="nav-item" data-page="risk"><i class="fa-solid fa-triangle-exclamation"></i><span>风险预警</span><span class="badge-new">NEW</span></div>
+        </div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-title">
+          <span class="group-icon"><i class="fas fa-truck"></i></span>
+          <span class="group-name">采购执行</span>
+          <i class="chevron fas fa-chevron-up"></i>
+        </div>
+        <div class="nav-items-wrap">
+          <div class="nav-sub-divider">日常采购</div>
+          <div class="nav-item" data-page="chat"><i class="fa-solid fa-comments"></i><span>供应商对话</span></div>
+          <div class="nav-item" data-page="orders"><i class="fa-solid fa-receipt"></i><span>订单管理</span></div>
+          <div class="nav-item" data-page="sla"><i class="fa-solid fa-clock"></i><span>时效看板</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-foot">
+      <div><span class="pulse-dot"></span>NEURAL LINK · v3.0</div>
+      <div style="margin-top:4px">已对接 <b style="color:var(--cyan)">6</b> 个货源平台</div>
+      <div>实时同步 · 二道贩子专用</div>
+    </div>
+  </aside>
+
+  <!-- =========== MAIN =========== -->
+  <main class="main">
+    <div class="topbar">
+      <div class="crumb" id="crumb">总览看板<small>· 选品决策 · 今日实时</small></div>
+      <div class="top-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="搜索货品 / 供应商 / 订单号...">
+        <kbd>⌘K</kbd>
+      </div>
+      <div class="top-actions">
+        <div class="selection-badge" id="selBadge" title="选品列表">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span>选品列表</span>
+          <span class="count" id="selCount">0</span>
+        </div>
+        <button class="icon-btn" title="消息"><i class="fa-regular fa-bell"></i><span class="dot"></span></button>
+        <button class="icon-btn" title="帮助"><i class="fa-regular fa-circle-question"></i></button>
+        <div class="user-chip">
+          <div class="user-ava">李</div>
+          <div class="user-meta"><b>李二道</b><span>新手·LV2</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="pageContainer">
+
+      <!-- ============== 1. 总览看板 ============== -->
+      <div class="page active" id="page-dashboard">
+        <!-- KPIs -->
+        <div class="kpi-grid">
+          <div class="kpi">
+            <i class="fa-solid fa-paw kpi-bg"></i>
+            <div class="kpi-label">覆盖宠物</div>
+            <div class="kpi-value">6<small>大类 · 28+细分</small></div>
+            <div class="kpi-foot"><span class="delta up">↑ 本月+3</span> · 新增鹦鹉/守宫</div>
+          </div>
+          <div class="kpi">
+            <i class="fa-solid fa-bolt-lightning kpi-bg amber"></i>
+            <div class="kpi-label">复购潜力</div>
+            <div class="kpi-value">73%<small>耗材占比</small></div>
+            <div class="kpi-foot"><span class="delta up">↑ 12pp</span> · 高频复购品类扩张</div>
+          </div>
+          <div class="kpi">
+            <i class="fa-solid fa-coins kpi-bg pink"></i>
+            <div class="kpi-label">最低拿货价</div>
+            <div class="kpi-value">¥0.32<small>/件 起</small></div>
+            <div class="kpi-foot"><span class="text-amber">义乌购</span> · 除臭香珠尾货</div>
+          </div>
+          <div class="kpi">
+            <i class="fa-solid fa-store kpi-bg emerald"></i>
+            <div class="kpi-label">在线供应商</div>
+            <div class="kpi-value">214<small>家</small></div>
+            <div class="kpi-foot"><span class="pulse-dot"></span>实时对接 6 个平台</div>
+          </div>
+        </div>
+
+        <!-- 三大爆款赛道 -->
+        <div class="card glow" style="margin-bottom:22px">
+          <div class="card-head">
+            <div class="card-title"><span class="accent"></span>高复购爆款赛道 · 二道贩子保命款</div>
+            <div class="card-sub">基于近30天1688/义乌购走货数据</div>
+          </div>
+          <div class="race-grid">
+            <div class="race">
+              <div class="race-emoji">🦷</div>
+              <div class="race-name">益生菌洁齿水</div>
+              <div class="text-2" style="font-size:12px">消耗周期 18-22天 · 订阅制最佳</div>
+              <div class="race-stats">
+                <span>拿货 <b class="text-amber">¥4.2</b></span>
+                <span>售价 <b class="text-emerald">¥19.9</b></span>
+                <span>毛利率 <b class="text-cyan">340%</b></span>
+                <span>复购 <b class="text-pink">84%</b></span>
+              </div>
+              <div class="race-bar"><i style="width:84%"></i></div>
+            </div>
+            <div class="race">
+              <div class="race-emoji">🧻</div>
+              <div class="race-name">纳米矿晶尿垫</div>
+              <div class="text-2" style="font-size:12px">15天/包 · 日耗刚需</div>
+              <div class="race-stats">
+                <span>拿货 <b class="text-amber">¥2.8</b></span>
+                <span>售价 <b class="text-emerald">¥12.9</b></span>
+                <span>毛利率 <b class="text-cyan">360%</b></span>
+                <span>复购 <b class="text-pink">88%</b></span>
+              </div>
+              <div class="race-bar"><i style="width:88%"></i></div>
+            </div>
+            <div class="race">
+              <div class="race-emoji">🍯</div>
+              <div class="race-name">舔食垫 + 酱膏套装</div>
+              <div class="text-2" style="font-size:12px">硬件一次 + 酱膏周耗</div>
+              <div class="race-stats">
+                <span>套装 <b class="text-amber">¥4.7</b></span>
+                <span>售价 <b class="text-emerald">¥29.9</b></span>
+                <span>酱膏复购 <b class="text-cyan">800%</b></span>
+                <span>复购 <b class="text-pink">79%</b></span>
+              </div>
+              <div class="race-bar"><i style="width:79%"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 复购评分 + 趋势雷达 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title"><span class="accent pink"></span>复购评分卡 · 多维诊断</div>
+            </div>
+            <div style="display:flex;gap:10px;margin-bottom:14px">
+              <input type="text" id="rpInput" value="纳米矿晶尿垫" placeholder="输入商品关键词..." style="flex:1">
+              <button class="btn primary" id="rpAnalyze"><i class="fa-solid fa-wand-magic-sparkles"></i> 诊断</button>
+            </div>
+            <div class="repurchase-result">
+              <div class="gauge">
+                <svg class="gauge-svg" width="92" height="92" viewBox="0 0 92 92">
+                  <circle cx="46" cy="46" r="38" stroke="#0a111f" stroke-width="8" fill="none"></circle>
+                  <circle id="gaugeArc" cx="46" cy="46" r="38" stroke="url(#gg)" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="238.76" stroke-dashoffset="28.65" transform="rotate(-90 46 46)"></circle>
+                  <defs>
+                    <lineargradient id="gg" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0" stop-color="#06d4f0"></stop>
+                      <stop offset="1" stop-color="#ec4899"></stop>
+                    </lineargradient>
+                  </defs>
+                </svg>
+                <div class="gauge-meta">
+                  <div class="gauge-label">复购预测</div>
+                  <div class="gauge-score" id="gaugeScore">88<span class="text-2" style="font-size:18px">%</span></div>
+                  <div class="text-2" style="font-size:12px">★★★★★ 顶级耗材基因</div>
+                </div>
+              </div>
+              <div class="repurchase-axes">
+                <div class="axis"><span class="axis-label">消耗速度</span><div class="axis-bar"><i style="width:92%;background:linear-gradient(90deg,var(--cyan),var(--emerald))"></i></div><span class="axis-val">92</span></div>
+                <div class="axis"><span class="axis-label">刚需程度</span><div class="axis-bar"><i style="width:85%;background:linear-gradient(90deg,var(--amber),var(--pink))"></i></div><span class="axis-val">85</span></div>
+                <div class="axis"><span class="axis-label">价格敏感</span><div class="axis-bar"><i style="width:72%;background:linear-gradient(90deg,var(--violet),var(--cyan))"></i></div><span class="axis-val">72</span></div>
+                <div class="axis"><span class="axis-label">季节稳定</span><div class="axis-bar"><i style="width:95%;background:linear-gradient(90deg,var(--emerald),var(--cyan))"></i></div><span class="axis-val">95</span></div>
+              </div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">
+                <span class="pill emerald">日耗品</span>
+                <span class="pill cyan">订阅制最佳</span>
+                <span class="pill amber">货架置顶</span>
+                <span class="pill pink">满减组合</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title"><span class="accent amber"></span>跨境趋势雷达</div>
+              <div class="card-sub">3分钟前同步</div>
+            </div>
+            <div id="signalBox">
+              <div class="signal hot">
+                <div class="signal-ico"><i class="fab fa-tiktok"></i></div>
+                <div class="signal-body">
+                  <div class="signal-title">TikTok #reptile 蜥蜴恒温箱</div>
+                  <div class="signal-meta">近7天搜索量 · 美国/英国</div>
+                </div>
+                <div class="signal-delta">+210%</div>
+              </div>
+              <div class="signal amber">
+                <div class="signal-ico"><i class="fa-solid fa-book"></i></div>
+                <div class="signal-body">
+                  <div class="signal-title">小红书"仓鼠跑轮静音"</div>
+                  <div class="signal-meta">笔记增量 · 90后女性</div>
+                </div>
+                <div class="signal-delta">+178%</div>
+              </div>
+              <div class="signal">
+                <div class="signal-ico"><i class="fa-solid fa-industry"></i></div>
+                <div class="signal-body">
+                  <div class="signal-title">1688 静音轴承跑轮缺货预警</div>
+                  <div class="signal-meta">头部工厂排单至 6月</div>
+                </div>
+                <div class="signal-delta text-rose">缺货</div>
+              </div>
+              <div class="signal">
+                <div class="signal-ico"><i class="fa-solid fa-fire"></i></div>
+                <div class="signal-body">
+                  <div class="signal-title">猫爬架剑麻柱</div>
+                  <div class="signal-meta">抖音电商成交 · 春季换毛季</div>
+                </div>
+                <div class="signal-delta">+143%</div>
+              </div>
+            </div>
+            <button class="btn ghost sm" style="width:100%;margin-top:10px" id="refreshSignals"><i class="fa-solid fa-arrows-rotate"></i> 拉取新信号</button>
+          </div>
+        </div>
+
+        <!-- 30日走货趋势 -->
+        <div class="card" style="margin-bottom:22px">
+          <div class="card-head">
+            <div class="card-title"><span class="accent"></span>30日走货趋势 · 三大爆款</div>
+            <div class="card-sub">单位:箱/日 · 数据源 1688批发</div>
+          </div>
+          <canvas id="trendChart" height="541" style="display: block; box-sizing: border-box; height: 361px; width: 1354px;" width="2031"></canvas>
+        </div>
+
+        <!-- 头部货源平台 -->
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title"><span class="accent amber"></span>已对接货源平台 · 各家强项</div>
+            <div class="card-sub">实时同步 · 一键跳转</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            <div class="card" style="margin:0;padding:14px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><i class="fab fa-alipay text-cyan" style="font-size:24px"></i><b>1688.com</b></div><div class="text-2" style="font-size:12px">源头工厂 · 支持轻定制 · 全品类深度</div><div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><span class="pill cyan">主力</span><span class="pill muted">起订量较高</span></div></div>
+            <div class="card" style="margin:0;padding:14px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><i class="fa-solid fa-city text-amber" style="font-size:24px"></i><b>义乌购</b></div><div class="text-2" style="font-size:12px">小商品海洋 · 库存尾货 · 一件代发</div><div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><span class="pill amber">低价</span><span class="pill emerald">无门槛</span></div></div>
+            <div class="card" style="margin:0;padding:14px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><i class="fa-solid fa-globe text-emerald" style="font-size:24px"></i><b>Chinagoods</b></div><div class="text-2" style="font-size:12px">义乌小商品城官方背书 · 源头认证</div><div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><span class="pill emerald">合规</span><span class="pill muted">外贸通道</span></div></div>
+            <div class="card" style="margin:0;padding:14px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><i class="fab fa-pagelines text-pink" style="font-size:24px"></i><b>多多批发</b></div><div class="text-2" style="font-size:12px">拼多多货源 · 极致低价 · 走量优势</div><div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><span class="pill pink">最低价</span><span class="pill rose">品控波动</span></div></div>
+            <div class="card" style="margin:0;padding:14px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><i class="fa-solid fa-paw text-violet" style="font-size:24px"></i><b>波奇宠物</b></div><div class="text-2" style="font-size:12px">宠物垂类头部 · 品牌代发 · 5-7折</div><div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><span class="pill violet">品牌粮</span><span class="pill cyan">代发</span></div></div>
+            <div class="card" style="margin:0;padding:14px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><i class="fa-solid fa-dog text-cyan" style="font-size:24px"></i><b>天元宠物</b></div><div class="text-2" style="font-size:12px">A股上市供应链 · OEM/ODM · 出口品质</div><div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><span class="pill cyan">大货</span><span class="pill emerald">OEM</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============== 2. 新手起步 ============== -->
+      <div class="page" id="page-quickstart">
+        <div class="ob-hero">
+          <i class="fa-solid fa-paw ob-paw"></i>
+          <h1>欢迎进入 <em>宠物垂类</em>选品的世界</h1>
+          <p>你是第 2,847 位新手店家。我们把"从零到第一单"拆成 5 个明确动作，每一步都告诉你 <b style="color:var(--amber)">为什么做、做什么、做错了会怎样</b>。跟着做，平均 7 天能跑通第一笔订单。</p>
+          <div class="ob-cta">
+            <button class="btn primary"><i class="fa-solid fa-play"></i> 开始第一步</button>
+            <button class="btn"><i class="fa-solid fa-headset"></i> 1对1顾问</button>
+            <button class="btn ghost"><i class="fa-solid fa-circle-info"></i> 查看完整指南</button>
+          </div>
+        </div>
+
+        <div class="step-grid">
+          <div class="step done">
+            <i class="fa-solid fa-circle-check check"></i>
+            <span class="step-num">01</span>
+            <div class="step-title">选定细分赛道</div>
+            <div class="step-desc">从猫/狗/爬虫/小宠中选 1-2 个你最熟悉的物种，别贪多。已选: <b class="text-emerald">猫 · 爬虫</b></div>
+          </div>
+          <div class="step done">
+            <i class="fa-solid fa-circle-check check"></i>
+            <span class="step-num">02</span>
+            <div class="step-title">绑定货源平台</div>
+            <div class="step-desc">至少接通 1688 + 义乌购，前者拿大货、后者补尾货。已接 <b class="text-emerald">6/6</b></div>
+          </div>
+          <div class="step now">
+            <span class="step-num">03</span>
+            <div class="step-title">挑 3 款保命款</div>
+            <div class="step-desc">高复购耗材是新手保命款。系统已推荐<b class="text-amber">尿垫/洁齿水/酱膏</b>，去比价拿货。</div>
+            <button class="btn amber sm" style="margin-top:10px"><i class="fa-solid fa-arrow-right"></i> 现在去做</button>
+          </div>
+          <div class="step">
+            <span class="step-num">04</span>
+            <div class="step-title">测款小批量</div>
+            <div class="step-desc">单款先备 50 件试卖，跑 7 天看转化率。亏 200 块以内的，全是学费。</div>
+          </div>
+          <div class="step">
+            <span class="step-num">05</span>
+            <div class="step-title">复购回流</div>
+            <div class="step-desc">收到第一笔订单后，用"消耗到期提醒"做二次触达。这才是宠物垂类的金矿。</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-bottom:22px">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title"><span class="accent amber"></span>新手必读 · 8 个血泪经验</div>
+              <div class="card-sub">来自 200+ 二道贩子复盘</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px">
+              <div><b class="text-cyan">#1</b> &nbsp;<b>活体宠物不要碰</b><div class="text-2" style="font-size:12px;margin-top:2px">死亡率高、纠纷重、平台违规风险大</div></div>
+              <div><b class="text-cyan">#2</b> &nbsp;<b>宠粮先做副品牌代销</b><div class="text-2" style="font-size:12px;margin-top:2px">品牌粮要资质，没资质先做波奇代发</div></div>
+              <div><b class="text-cyan">#3</b> &nbsp;<b>客单价别低于 25 元</b><div class="text-2" style="font-size:12px;margin-top:2px">扣除运费 8-12 元后，低于这个数没利润</div></div>
+              <div><b class="text-cyan">#4</b> &nbsp;<b>1688 起订量是陷阱</b><div class="text-2" style="font-size:12px;margin-top:2px">写 500 起的实际 50 也能谈，多砍多问</div></div>
+              <div><b class="text-cyan">#5</b> &nbsp;<b>样品费一定要付</b><div class="text-2" style="font-size:12px;margin-top:2px">免费样品的供应商，量产时常缺斤短两</div></div>
+              <div><b class="text-cyan">#6</b> &nbsp;<b>退货率算 8%</b><div class="text-2" style="font-size:12px;margin-top:2px">宠物类目平均退货率 5-12%，建模时按 8% 算</div></div>
+              <div><b class="text-cyan">#7</b> &nbsp;<b>用义乌购补尾货</b><div class="text-2" style="font-size:12px;margin-top:2px">1688 主力 + 义乌购清库存 = 最稳货盘</div></div>
+              <div><b class="text-cyan">#8</b> &nbsp;<b>第一周别投广告</b><div class="text-2" style="font-size:12px;margin-top:2px">先把内功练好（产品/详情页），再砸钱</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title"><span class="accent"></span>赛道选择推荐</div>
+            </div>
+            <div style="font-size:13px;color:var(--text-2);margin-bottom:14px">基于你的资金/经验，AI 推荐:</div>
+            <div style="padding:14px;background:linear-gradient(135deg,rgba(245,166,35,.1),transparent);border:1px solid rgba(245,166,35,.3);border-radius:12px;margin-bottom:10px">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="pill amber">推荐</span><b class="serif">小宠耗材组合</b></div>
+              <div class="text-2" style="font-size:12px;line-height:1.7">入门门槛低 · 起订量 20 件起 · 复购率 80%+<br>核心款: 尿垫/木屑/磨牙棒/跑轮配件</div>
+              <div class="num text-amber" style="margin-top:8px">启动资金 ¥800-1,500</div>
+            </div>
+            <div style="padding:14px;background:rgba(6,212,240,.04);border:1px solid var(--border);border-radius:12px;margin-bottom:10px">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="pill cyan">进阶</span><b class="serif">爬宠设备组</b></div>
+              <div class="text-2" style="font-size:12px;line-height:1.7">客单价高 · 利润可观 · 但售前咨询繁重<br>核心款: 恒温箱/UVB灯/温控器</div>
+              <div class="num text-cyan" style="margin-top:8px">启动资金 ¥3,000-6,000</div>
+            </div>
+            <div style="padding:14px;background:rgba(244,63,94,.04);border:1px solid var(--border);border-radius:12px">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="pill rose">慎入</span><b class="serif">猫狗主粮</b></div>
+              <div class="text-2" style="font-size:12px;line-height:1.7">竞争极其惨烈 · 大品牌封锁 · 资质门槛<br>新手建议: 先做粮类附属品（碗具/磨牙等）</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============== 3. 选品广场 ============== -->
+      <div class="page" id="page-discover">
+        <div class="disc-filters">
+          <select><option>全部宠物</option><option>猫</option><option>狗</option><option>爬虫</option><option>小宠</option><option>鸟</option><option>水族</option></select>
+          <select><option>全部平台</option><option>1688</option><option>义乌购</option><option>Chinagoods</option><option>多多批发</option><option>波奇</option><option>天元</option></select>
+          <select><option>价格不限</option><option>¥0-5 (尾货)</option><option>¥5-20 (主力)</option><option>¥20-50 (中端)</option><option>¥50+ (高客单)</option></select>
+          <select><option>排序：综合推荐</option><option>复购率高→低</option><option>毛利率高→低</option><option>拿货价低→高</option><option>近30日销量</option></select>
+          <input type="text" placeholder="🔍 搜索货品名 / 商家..." style="flex:1;min-width:200px">
+          <button class="btn primary"><i class="fa-solid fa-filter"></i> 筛选</button>
+        </div>
+
+        <div class="card glow" style="margin-bottom:16px;padding:14px 18px;background:linear-gradient(90deg,rgba(245,166,35,.08),transparent)">
+          <div style="display:flex;align-items:center;gap:10px"><i class="fa-solid fa-robot text-amber"></i><span style="font-size:13px"><b>AI 选品建议</b>: 你的等级<b class="text-cyan">LV2</b>，资金<b class="text-cyan">¥1,500</b>。已为你过滤掉 起订量&gt;100、客单价&lt;25 元、退货率&gt;10% 的款。剩余 <b class="text-amber">186</b> 款符合。</span></div>
+        </div>
+
+        <div class="disc-grid" id="discGrid"><div class="prod" data-pid="p01">
+        <div class="prod-img">🧻<span class="prod-tag profit">高利润</span></div>
+        <div class="prod-body">
+          <div class="prod-name">纳米矿晶尿垫 50片</div>
+          <div class="prod-meta"><span class="prod-price">¥2.65</span><span class="pill muted">义乌购</span></div>
+        </div>
+        <div class="prod-foot"><span>30天 8.2万件</span><span class="text-cyan">看数据 →</span></div>
+      </div><div class="prod" data-pid="p02">
+        <div class="prod-img">🦷<span class="prod-tag hot">爆款</span></div>
+        <div class="prod-body">
+          <div class="prod-name">益生菌洁齿水 500ml</div>
+          <div class="prod-meta"><span class="prod-price">¥4.20</span><span class="pill muted">1688</span></div>
+        </div>
+        <div class="prod-foot"><span>30天 5.6万件</span><span class="text-cyan">看数据 →</span></div>
+      </div><div class="prod" data-pid="p03">
+        <div class="prod-img">🐹<span class="prod-tag hot">爆款</span></div>
+        <div class="prod-body">
+          <div class="prod-name">静音跑轮 21cm</div>
+          <div class="prod-meta"><span class="prod-price">¥4.20</span><span class="pill muted">1688</span></div>
+        </div>
+        <div class="prod-foot"><span>30天 4.1万件</span><span class="text-cyan">看数据 →</span></div>
+      </div><div class="prod" data-pid="p04">
+        <div class="prod-img">🍯<span class="prod-tag profit">高利润</span></div>
+        <div class="prod-body">
+          <div class="prod-name">宠物舔食垫+酱膏套装</div>
+          <div class="prod-meta"><span class="prod-price">¥4.70</span><span class="pill muted">多多批发</span></div>
+        </div>
+        <div class="prod-foot"><span>30天 3.8万件</span><span class="text-cyan">看数据 →</span></div>
+      </div><div class="prod" data-pid="p05">
+        <div class="prod-img">🦎<span class="prod-tag new">新品</span></div>
+        <div class="prod-body">
+          <div class="prod-name">爬宠智能恒温箱</div>
+          <div class="prod-meta"><span class="prod-price">¥28.00</span><span class="pill muted">1688</span></div>
+        </div>
+        <div class="prod-foot"><span>30天 1.2万件</span><span class="text-cyan">看数据 →</span></div>
+      </div><div class="prod" data-pid="p06">
+        <div class="prod-img">🐱<span class="prod-tag hot">爆款</span></div>
+        <div class="prod-body">
+          <div class="prod-name">剑麻猫抓柱 60cm</div>
+          <div class="prod-meta"><span class="prod-price">¥9.50</span><span class="pill muted">Chinagoods</span></div>
+        </div>
+        <div class="prod-foot"><span>30天 2.8万件</span><span class="text-cyan">看数据 →</span></div>
+      </div><div class="prod" data-pid="p07">
+        <div class="prod-img">💧<span class="prod-tag profit">高利润</span></div>
+        <div class="prod-body">
+          <div class="prod-name">智能饮水机滤芯 3片装</div>
+          <div class="prod-meta"><span class="prod-price">¥1.80</span><span class="pill muted">义乌购</span></div>
+        </div>
+        <div class="prod-foot"><span>30天 6.1万件</span><span class="text-cyan">看数据 →</span></div>
+      </div><div class="prod" data-pid="p08">
+        <div class="prod-img">🌿<span class="prod-tag new">尾货</span></div>
+        <div class="prod-body">
+          <div class="prod-name">除臭香珠 1kg</div>
+          <div class="prod-meta"><span class="prod-price">¥0.32</span><span class="pill muted">义乌购</span></div>
+        </div>
+        <div class="prod-foot"><span>30天 2.4万件</span><span class="text-cyan">看数据 →</span></div>
+      </div><div class="prod" data-pid="p09">
+        <div class="prod-img">🍖<span class="prod-tag hot">爆款</span></div>
+        <div class="prod-body">
+          <div class="prod-name">磨牙肉条 100g</div>
+          <div class="prod-meta"><span class="prod-price">¥1.50</span><span class="pill muted">多多批发</span></div>
+        </div>
+        <div class="prod-foot"><span>30天 9.8万件</span><span class="text-cyan">看数据 →</span></div>
+      </div><div class="prod" data-pid="p10">
+        <div class="prod-img">🐰</div>
+        <div class="prod-body">
+          <div class="prod-name">兔粮 五谷果蔬 1kg</div>
+          <div class="prod-meta"><span class="prod-price">¥6.80</span><span class="pill muted">天元宠物</span></div>
+        </div>
+        <div class="prod-foot"><span>30天 5800件</span><span class="text-cyan">看数据 →</span></div>
+      </div><div class="prod" data-pid="p11">
+        <div class="prod-img">💡<span class="prod-tag profit">高利润</span></div>
+        <div class="prod-body">
+          <div class="prod-name">UVB 5.0 灯管</div>
+          <div class="prod-meta"><span class="prod-price">¥12.00</span><span class="pill muted">1688</span></div>
+        </div>
+        <div class="prod-foot"><span>30天 4200件</span><span class="text-cyan">看数据 →</span></div>
+      </div><div class="prod" data-pid="p12">
+        <div class="prod-img">🦜</div>
+        <div class="prod-body">
+          <div class="prod-name">鹦鹉啃咬玩具 5件装</div>
+          <div class="prod-meta"><span class="prod-price">¥6.50</span><span class="pill muted">义乌购</span></div>
+        </div>
+        <div class="prod-foot"><span>30天 1.1万件</span><span class="text-cyan">看数据 →</span></div>
+      </div></div>
+      </div>
+
+      <!-- ============== 3.5 商品详情看板 (动态填充) ============== -->
+      <div class="page" id="page-prod-detail">
+        <div class="pd-head">
+          <div class="pd-img" id="pdImg">📦</div>
+          <div class="pd-info">
+            <h1 id="pdName">—</h1>
+            <div class="pd-meta">
+              <span class="pill muted" id="pdPlat">—</span>
+              <span class="pill" id="pdTag">—</span>
+              <span id="pdPlatform">—</span>
+              <span>·</span>
+              <span id="pdSku">SKU-—</span>
+            </div>
+          </div>
+          <div class="pd-actions">
+            <div class="pd-price">¥<span id="pdPrice">—</span><small>/件 拿货价</small></div>
+            <div style="display:flex;gap:8px;margin-top:6px">
+              <button class="btn primary sm" id="pdAddBtn"><i class="fa-solid fa-plus"></i> 加入选品</button>
+              <button class="pd-back" onclick="goBackToDiscover()"><i class="fa-solid fa-arrow-left"></i> 返回</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="pd-kpis">
+          <div class="pd-kpi"><div class="pd-kpi-lbl">近7日商家销量</div><div class="pd-kpi-val" id="pdSales7">—<small>件</small></div><div class="pd-kpi-delta" id="pdSalesDelta">—</div></div>
+          <div class="pd-kpi amber"><div class="pd-kpi-lbl">平均发货时长</div><div class="pd-kpi-val" id="pdShip">—<small>小时</small></div><div class="pd-kpi-delta" id="pdShipDelta">—</div></div>
+          <div class="pd-kpi emerald"><div class="pd-kpi-lbl">售后无理由率</div><div class="pd-kpi-val" id="pdAfter">—<small>%</small></div><div class="pd-kpi-delta" id="pdAfterDelta">—</div></div>
+          <div class="pd-kpi rose"><div class="pd-kpi-lbl">平均回复时长</div><div class="pd-kpi-val" id="pdReply">—<small>分钟</small></div><div class="pd-kpi-delta" id="pdReplyDelta">—</div></div>
+        </div>
+
+        <div class="pd-grid-2">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title"><span class="accent"></span>近 7 天商家销量走势</div>
+              <div class="card-sub">合并 6 平台同 SKU 累计</div>
+            </div>
+            <div class="pd-chart-wrap"><canvas id="pdSalesChart"></canvas></div>
+            <div class="pd-chart-foot">
+              <span><b class="text-cyan" id="pdAvgDay">—</b> 件/天</span>
+              <span><b class="text-amber" id="pdPeakDay">—</b> 峰值日</span>
+              <span><b class="text-emerald" id="pdGrowth">—</b> WoW</span>
+              <span><b id="pdConsistency">—</b> 稳定度</span>
+            </div>
+          </div>
+          <div class="card pd-ai">
+            <div class="card-head">
+              <div class="card-title"><span class="accent violet"></span><i class="fa-solid fa-robot text-violet"></i> AI 可行性评测</div>
+            </div>
+            <div class="pd-ai-row">
+              <div class="pd-ai-left">
+                <div class="pd-ai-verdict" id="pdAiVerdict">—</div>
+                <div class="pd-ai-score"><b id="pdAiScore">—</b><span style="color:var(--text-3)">/ 100</span></div>
+                <div class="pd-ai-bar"><div id="pdAiBar" style="width:0%"></div></div>
+              </div>
+              <ul class="pd-ai-points" id="pdAiPoints"></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title"><span class="accent pink"></span>同行卖得最好的 5 家</div>
+            <div class="card-sub">按 30 天 GMV 排序 · 含店铺评分 / 主营平台</div>
+          </div>
+          <table class="pd-comp-table">
+            <thead><tr><th style="width:50px">排名</th><th>店铺名</th><th>30天销量</th><th>客单价</th><th>评分</th><th>主营平台</th><th>所在地</th><th>核心打法</th></tr></thead>
+            <tbody id="pdCompTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============== 4. 趋势雷达 ============== -->
+      <div class="page" id="page-trend">
+        <div class="trend-grid">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title"><span class="accent pink"></span>实时热搜趋势</div>
+              <div class="card-sub">小红书 × 抖音 × TikTok</div>
+            </div>
+            <canvas id="hotChart" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title"><span class="accent amber"></span>季节性曲线</div>
+              <div class="card-sub">12个月走势 · 仅供参考</div>
+            </div>
+            <canvas id="seasonChart" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title"><span class="accent"></span>当前热度榜 TOP 10</div>
+            <button class="btn sm" style="margin-left:auto"><i class="fa-solid fa-arrows-rotate"></i> 刷新</button>
+          </div>
+          <table class="ord-table">
+            <thead><tr><th>#</th><th>热搜词</th><th>来源</th><th>近7日增幅</th><th>对应货盘</th><th>推荐度</th><th></th></tr></thead>
+            <tbody id="trendTbody"><tr>
+        <td class="mono text-3">#01</td>
+        <td><b>蜥蜴恒温箱平替</b></td>
+        <td><span class="pill muted">小红书</span></td>
+        <td><span class="pill rose">+340%</span></td>
+        <td class="text-2">27款</td>
+        <td class="text-amber" style="letter-spacing:2px">★★★★★</td>
+        <td><button class="btn sm">去比价</button></td>
+      </tr><tr>
+        <td class="mono text-3">#02</td>
+        <td><b>tiktok #reptile</b></td>
+        <td><span class="pill muted">TikTok</span></td>
+        <td><span class="pill rose">+210%</span></td>
+        <td class="text-2">19款</td>
+        <td class="text-amber" style="letter-spacing:2px">★★★★★</td>
+        <td><button class="btn sm">去比价</button></td>
+      </tr><tr>
+        <td class="mono text-3">#03</td>
+        <td><b>仓鼠跑轮静音</b></td>
+        <td><span class="pill muted">小红书</span></td>
+        <td><span class="pill rose">+178%</span></td>
+        <td class="text-2">12款</td>
+        <td class="text-amber" style="letter-spacing:2px">★★★★☆</td>
+        <td><button class="btn sm">去比价</button></td>
+      </tr><tr>
+        <td class="mono text-3">#04</td>
+        <td><b>猫爬架剑麻柱</b></td>
+        <td><span class="pill muted">抖音</span></td>
+        <td><span class="pill amber">+143%</span></td>
+        <td class="text-2">8款</td>
+        <td class="text-amber" style="letter-spacing:2px">★★★★☆</td>
+        <td><button class="btn sm">去比价</button></td>
+      </tr><tr>
+        <td class="mono text-3">#05</td>
+        <td><b>除臭香珠</b></td>
+        <td><span class="pill muted">1688</span></td>
+        <td><span class="pill amber">+124%</span></td>
+        <td class="text-2">40+款</td>
+        <td class="text-amber" style="letter-spacing:2px">★★★★★</td>
+        <td><button class="btn sm">去比价</button></td>
+      </tr><tr>
+        <td class="mono text-3">#06</td>
+        <td><b>宠物饮水机滤芯</b></td>
+        <td><span class="pill muted">淘宝</span></td>
+        <td><span class="pill cyan">+98%</span></td>
+        <td class="text-2">15款</td>
+        <td class="text-amber" style="letter-spacing:2px">★★★★☆</td>
+        <td><button class="btn sm">去比价</button></td>
+      </tr><tr>
+        <td class="mono text-3">#07</td>
+        <td><b>舔食垫慢食</b></td>
+        <td><span class="pill muted">小红书</span></td>
+        <td><span class="pill cyan">+87%</span></td>
+        <td class="text-2">9款</td>
+        <td class="text-amber" style="letter-spacing:2px">★★★☆☆</td>
+        <td><button class="btn sm">去比价</button></td>
+      </tr><tr>
+        <td class="mono text-3">#08</td>
+        <td><b>UVB灯管 5.0</b></td>
+        <td><span class="pill muted">1688</span></td>
+        <td><span class="pill cyan">+76%</span></td>
+        <td class="text-2">6款</td>
+        <td class="text-amber" style="letter-spacing:2px">★★★★☆</td>
+        <td><button class="btn sm">去比价</button></td>
+      </tr><tr>
+        <td class="mono text-3">#09</td>
+        <td><b>防误食慢食碗</b></td>
+        <td><span class="pill muted">抖音</span></td>
+        <td><span class="pill cyan">+62%</span></td>
+        <td class="text-2">14款</td>
+        <td class="text-amber" style="letter-spacing:2px">★★★☆☆</td>
+        <td><button class="btn sm">去比价</button></td>
+      </tr><tr>
+        <td class="mono text-3">#10</td>
+        <td><b>宠物冷垫夏季</b></td>
+        <td><span class="pill muted">淘宝</span></td>
+        <td><span class="pill cyan">+54%</span></td>
+        <td class="text-2">22款</td>
+        <td class="text-amber" style="letter-spacing:2px">★★★☆☆</td>
+        <td><button class="btn sm">去比价</button></td>
+      </tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============== 5. 宠物矩阵 ============== -->
+      <div class="page" id="page-matrix">
+        <div class="card" style="margin-bottom:18px;padding:14px 18px">
+          <div style="display:flex;align-items:center;gap:12px"><i class="fa-solid fa-paw text-amber" style="font-size:18px"></i><span><b class="serif">宠物垂类 × 产品矩阵</b> · 每个物种的"喜好偏好" + "消耗周期"，帮你找到刚需+高复购的交集</span></div>
+        </div>
+        <div class="matrix-grid">
+          <div class="pet-card">
+            <div class="pet-head"><div class="pet-avatar">🐱</div><div><div class="pet-name">猫 · 伴侣型</div><div class="pet-trait">CAT · 高频抚摸 · 独立性强</div></div></div>
+            <ul class="sku-list">
+              <li><span>猫窝（毛绒/编织）</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 92%</span><span class="pill muted">一次性</span></span></li>
+              <li><span>猫爬架 · 剑麻柱</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 88%</span><span class="pill amber">部件复购</span></span></li>
+              <li><span>智能饮水机滤芯</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 80%</span><span class="pill emerald">月耗</span></span></li>
+              <li><span>猫砂 · 矿砂/豆腐砂</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 95%</span><span class="pill emerald">周耗</span></span></li>
+            </ul>
+          </div>
+          <div class="pet-card">
+            <div class="pet-head"><div class="pet-avatar">🐶</div><div><div class="pet-name">狗 · 伴侣型</div><div class="pet-trait">DOG · 户外活动 · 强社交</div></div></div>
+            <ul class="sku-list">
+              <li><span>狗笼 / 航空箱</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 70%</span><span class="pill muted">一次性</span></span></li>
+              <li><span>恒温狗窝</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 78%</span><span class="pill cyan">季节性</span></span></li>
+              <li><span>洗脚杯 / 洁足泡沫</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 82%</span><span class="pill emerald">日耗</span></span></li>
+              <li><span>牵引绳 · 自动伸缩</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 86%</span><span class="pill amber">易损耗</span></span></li>
+            </ul>
+          </div>
+          <div class="pet-card">
+            <div class="pet-head"><div class="pet-avatar">🦎</div><div><div class="pet-name">爬虫 · 蜥蜴/守宫</div><div class="pet-trait">REPTILE · 环境敏感 · 设备依赖</div></div></div>
+            <ul class="sku-list">
+              <li><span>智能恒温箱</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 99%</span><span class="pill muted">一次性</span></span></li>
+              <li><span>UVB 灯管</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 100%</span><span class="pill emerald">6月换</span></span></li>
+              <li><span>加热垫 + 温控器</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 95%</span><span class="pill cyan">半年耗</span></span></li>
+              <li><span>活体饲料 / 钙粉</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 100%</span><span class="pill emerald">周耗</span></span></li>
+            </ul>
+          </div>
+          <div class="pet-card">
+            <div class="pet-head"><div class="pet-avatar">🐹</div><div><div class="pet-name">小宠 · 仓鼠/兔</div><div class="pet-trait">SMALL · 笼养 · 低门槛</div></div></div>
+            <ul class="sku-list">
+              <li><span>静音跑轮</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 99%</span><span class="pill amber">轴承易损</span></span></li>
+              <li><span>草架 / 悬挂食盆</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 90%</span><span class="pill muted">耐用品</span></span></li>
+              <li><span>尿垫 / 木粒</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 96%</span><span class="pill emerald">周耗</span></span></li>
+              <li><span>磨牙石 / 啃咬玩具</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 87%</span><span class="pill cyan">月耗</span></span></li>
+            </ul>
+          </div>
+          <div class="pet-card">
+            <div class="pet-head"><div class="pet-avatar">🦜</div><div><div class="pet-name">鸟类 · 鹦鹉</div><div class="pet-trait">BIRD · 智商高 · 玩具党</div></div></div>
+            <ul class="sku-list">
+              <li><span>站架 / 磨爪棒</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 88%</span><span class="pill cyan">季节耗</span></span></li>
+              <li><span>自动下料食盒</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 75%</span><span class="pill muted">一次性</span></span></li>
+              <li><span>益智啃咬玩具</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 92%</span><span class="pill amber">月耗</span></span></li>
+              <li><span>谷物 / 果蔬干</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 95%</span><span class="pill emerald">周耗</span></span></li>
+            </ul>
+          </div>
+          <div class="pet-card">
+            <div class="pet-head"><div class="pet-avatar">🐠</div><div><div class="pet-name">水族 · 观赏鱼</div><div class="pet-trait">AQUARIUM · 设备党 · 玩家圈</div></div></div>
+            <ul class="sku-list">
+              <li><span>过滤器 · 滤材套装</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 90%</span><span class="pill emerald">月耗</span></span></li>
+              <li><span>水草灯 / CO2 细化器</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 78%</span><span class="pill cyan">玩家款</span></span></li>
+              <li><span>水质硝化菌</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 85%</span><span class="pill emerald">月耗</span></span></li>
+              <li><span>鱼粮 · 颗粒/薄片</span><span class="sku-meta"><span class="heart"><i class="fa-solid fa-heart"></i> 100%</span><span class="pill emerald">月耗</span></span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============== 6. 跨平台比价 ============== -->
+      <div class="page" id="page-compare">
+        <div class="pc-search">
+          <input type="text" id="pcInput" value="纳米矿晶尿垫 50片装 60×45cm" placeholder="输入商品名 / 规格 / SKU...">
+          <button class="btn primary"><i class="fa-solid fa-magnifying-glass-dollar"></i> 全网比价</button>
+          <button class="btn"><i class="fa-solid fa-camera"></i> 图片识价</button>
+        </div>
+
+        <div class="card glow" style="margin-bottom:16px">
+          <div class="card-head">
+            <div class="card-title"><span class="accent emerald"></span>当前对比 · 纳米矿晶尿垫 50片装</div>
+            <div class="card-sub">规格 60×45cm · 同SKU匹配 6 家供应商</div>
+          </div>
+          <table class="pc-table">
+            <thead>
+              <tr><th>货源平台</th><th>供应商</th><th>单价</th><th>起订量</th><th>包邮政策</th><th>退换政策</th><th>到货时效</th><th>对比</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="platform-chip"><div class="pl-ico"><i class="fab fa-alipay text-cyan"></i></div><b>1688</b></div></td>
+                <td>山东洁齿宠品<br><span class="text-3" style="font-size:11px">★ 4.9 · 6年老店</span></td>
+                <td><span class="price-cell">¥2.85</span></td>
+                <td>100 件</td>
+                <td><span class="pill emerald">满300包邮</span></td>
+                <td>7天无理由</td>
+                <td>江浙沪 24h</td>
+                <td>基准价</td>
+                <td><button class="btn sm">询单</button></td>
+              </tr>
+              <tr>
+                <td><div class="platform-chip"><div class="pl-ico"><i class="fa-solid fa-city text-amber"></i></div><b>义乌购</b></div></td>
+                <td>义乌尾货宠品仓<br><span class="text-3" style="font-size:11px">★ 4.6 · 一件代发</span></td>
+                <td><span class="price-cell best">¥2.65 <i class="fa-solid fa-crown" style="color:gold;font-size:11px"></i></span><div class="save-bar"><i style="width:100%"></i></div></td>
+                <td>200 件</td>
+                <td><span class="pill emerald">量大包邮</span></td>
+                <td>支持代发</td>
+                <td>义乌发 48h</td>
+                <td><span class="text-emerald num">省 ¥0.20/件</span></td>
+                <td><button class="btn sm primary">询单</button></td>
+              </tr>
+              <tr>
+                <td><div class="platform-chip"><div class="pl-ico"><i class="fab fa-pagelines text-pink"></i></div><b>多多批发</b></div></td>
+                <td>多多批发宠品<br><span class="text-3" style="font-size:11px">★ 4.3 · 评价较低</span></td>
+                <td><span class="price-cell">¥2.92</span></td>
+                <td>50 件</td>
+                <td><span class="pill muted">不包邮</span></td>
+                <td><span class="text-rose">不支持退换</span></td>
+                <td>3-5天</td>
+                <td><span class="text-rose num">贵 ¥0.07</span></td>
+                <td><button class="btn sm">询单</button></td>
+              </tr>
+              <tr>
+                <td><div class="platform-chip"><div class="pl-ico"><i class="fa-solid fa-globe text-emerald"></i></div><b>Chinagoods</b></div></td>
+                <td>Chinagoods 自营<br><span class="text-3" style="font-size:11px">★ 4.8 · 官方认证</span></td>
+                <td><span class="price-cell">¥3.10</span></td>
+                <td>100 件</td>
+                <td><span class="pill emerald">包邮</span></td>
+                <td>7天质保</td>
+                <td>义乌发 48h</td>
+                <td><span class="text-rose num">贵 ¥0.25</span></td>
+                <td><button class="btn sm">询单</button></td>
+              </tr>
+              <tr>
+                <td><div class="platform-chip"><div class="pl-ico"><i class="fa-solid fa-paw text-violet"></i></div><b>波奇</b></div></td>
+                <td>波奇自营代发<br><span class="text-3" style="font-size:11px">★ 4.9 · 代发省心</span></td>
+                <td><span class="price-cell">¥3.80</span></td>
+                <td>1 件</td>
+                <td><span class="pill emerald">包邮代发</span></td>
+                <td>7天无理由</td>
+                <td>当日发货</td>
+                <td><span class="text-rose num">贵 ¥0.95</span></td>
+                <td><button class="btn sm">询单</button></td>
+              </tr>
+              <tr>
+                <td><div class="platform-chip"><div class="pl-ico"><i class="fa-solid fa-dog text-cyan"></i></div><b>天元宠物</b></div></td>
+                <td>天元宠物 OEM<br><span class="text-3" style="font-size:11px">★ 5.0 · 上市公司</span></td>
+                <td><span class="price-cell">¥3.50</span></td>
+                <td>500 件</td>
+                <td><span class="pill emerald">包邮</span></td>
+                <td>含质检报告</td>
+                <td>5天内</td>
+                <td><span class="text-3 num">大货优势</span></td>
+                <td><button class="btn sm">询单</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 价格带 + AI建议 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title"><span class="accent amber"></span>同行竞品价格带（自营售价）</div>
+              <div class="card-sub">采集自淘宝/拼多多/抖音店铺 · 158 个样本</div>
+            </div>
+            <div class="comp-belt">
+              <div class="belt-track">
+                <div class="belt-fill" style="left:0;right:0"></div>
+                <div class="belt-marker" style="left:8%" data-label="¥8.9"></div>
+                <div class="belt-marker" style="left:32%" data-label="¥11.5"></div>
+                <div class="belt-marker mine" style="left:48%" data-label="你的售价 ¥12.9"></div>
+                <div class="belt-marker" style="left:72%" data-label="¥16.8"></div>
+                <div class="belt-marker" style="left:95%" data-label="¥24.9"></div>
+              </div>
+              <div class="belt-labels">
+                <span>低价区 ¥8.9</span>
+                <span>中位 ¥12.5</span>
+                <span>高价区 ¥24.9</span>
+              </div>
+            </div>
+            <div style="margin-top:14px;font-size:13px;color:var(--text-2)">
+              你的售价位于<b class="text-cyan">中位偏左</b>，性价比标签突出，建议主图加强"50片大包装"卖点。
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title"><span class="accent pink"></span>AI 综合建议</div>
+            </div>
+            <div style="padding:14px;background:linear-gradient(135deg,rgba(16,185,129,.08),transparent);border:1px solid rgba(16,185,129,.25);border-radius:12px;margin-bottom:10px;font-size:13px">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><i class="fa-solid fa-circle-check text-emerald"></i><b class="text-emerald serif">首选 义乌购</b></div>
+              <div class="text-2">最低 ¥2.65，起订200件可接受。一件代发省压货风险，适合你的资金量。</div>
+            </div>
+            <div style="padding:14px;background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.25);border-radius:12px;margin-bottom:10px;font-size:13px">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><i class="fa-solid fa-circle-info text-amber"></i><b class="text-amber serif">备用 1688</b></div>
+              <div class="text-2">起订100件门槛低，江浙沪发货快。义乌购缺货时切换。</div>
+            </div>
+            <div style="padding:14px;background:rgba(244,63,94,.04);border:1px solid rgba(244,63,94,.2);border-radius:12px;font-size:13px">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><i class="fa-solid fa-circle-xmark text-rose"></i><b class="text-rose serif">避坑 多多批发</b></div>
+              <div class="text-2">不支持退换，新手吃亏概率大。除非你预算极度敏感，别走这家。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============== 7. 真实利润计算器 ============== -->
+      <div class="page" id="page-profit">
+        <div class="card" style="margin-bottom:18px;padding:14px 18px;background:linear-gradient(90deg,rgba(245,166,35,.06),transparent);border-color:rgba(245,166,35,.2)">
+          <div style="display:flex;align-items:center;gap:10px"><i class="fa-solid fa-circle-info text-amber"></i><span style="font-size:13px">原版"售价减进价"算法对新手是<b class="text-rose">陷阱</b>。这里把<b class="text-amber">运费/包装/平台扣点/退货率/打包工时</b>全部纳入。退货率默认从<b class="text-cyan">选品广场真实售后数据</b>反推，偏差不超过 3 个点。</span></div>
+        </div>
+        <div class="pe-grid">
+          <div class="card">
+            <div class="card-head"><div class="card-title"><span class="accent"></span>成本输入</div></div>
+            <div class="pe-form">
+              <div class="full">
+                <label>选择参考货品 · <span style="color:var(--text-3);font-weight:500">从选品广场带入真实数据</span></label>
+                <select id="peSelect" style="width:100%">
+                  <!-- 8 字段: cost,retail,shipOut,pack,fee%,return%,labor,shipIn -->
+                  <option value="2.85,18.9,3.5,0.3,5,2.8,0.8,0.3">纳米矿晶尿垫 50片 · 退货 2.8%</option>
+                  <option value="4.2,19.9,4.5,0.5,5,5.5,0.8,0.4">益生菌洁齿水 500ml · 退货 5.5%</option>
+                  <option value="4.2,22,5.5,0.5,5,8.2,0.8,0.4">仓鼠静音跑轮 21cm · 退货 8.2%</option>
+                  <option value="4.7,29.9,5.5,0.6,5,4.4,1.0,0.3">舔食垫+酱膏套装 · 退货 4.4%</option>
+                  <option value="28,138,18,3.0,4,11.5,2.5,2.5">爬宠智能恒温箱 · 退货 11.5%</option>
+                  <option value="9.5,45,12,1.2,5,6.8,1.5,1.0">剑麻猫抓柱 60cm · 退货 6.8%</option>
+                  <option value="1.8,12.9,3.0,0.3,5,3.2,0.5,0.2">智能饮水机滤芯 3片 · 退货 3.2%</option>
+                  <option value="0.32,9.9,4.5,0.5,5,10.8,0.5,0.1">除臭香珠 1kg · 退货 10.8%</option>
+                  <option value="1.5,9.9,3.5,0.4,5,5.9,0.6,0.2">磨牙肉条 100g · 退货 5.9%</option>
+                  <option value="6.8,28.8,5.5,0.6,5,7.5,0.8,0.5">兔粮 五谷果蔬 1kg · 退货 7.5%</option>
+                  <option value="12,48,6.0,1.5,4,9.2,1.0,0.8">UVB 5.0 灯管 · 退货 9.2%</option>
+                  <option value="6.5,28,4.5,0.6,5,8.8,0.8,0.4">鹦鹉啃咬玩具 5件装 · 退货 8.8%</option>
+                </select>
+              </div>
+              <div>
+                <label>拿货价 (元/件)</label>
+                <input type="number" id="peCost" value="2.85" step="0.01">
+              </div>
+              <div>
+                <label>建议售价 (元/件)</label>
+                <input type="number" id="pePrice" value="18.9" step="0.1">
+              </div>
+              <div>
+                <label>采购运费分摊 (元/件)</label>
+                <input type="number" id="peShipIn" value="0.3" step="0.1">
+              </div>
+              <div>
+                <label>包装成本 (元/件)</label>
+                <input type="number" id="pePack" value="0.3" step="0.1">
+              </div>
+              <div>
+                <label>发货运费 (元/单)</label>
+                <input type="number" id="peShipOut" value="3.5" step="0.1">
+              </div>
+              <div>
+                <label>平台扣点 (%)</label>
+                <input type="number" id="peFee" value="5" step="0.5">
+              </div>
+              <div>
+                <label>退货率 (%) · <span style="color:var(--cyan);font-size:11px">同行真实</span></label>
+                <input type="number" id="peReturn" value="2.8" step="0.1">
+              </div>
+              <div>
+                <label>打包工时 (元/单)</label>
+                <input type="number" id="peLabor" value="0.8" step="0.1">
+              </div>
+              <div class="full" style="margin-top:-2px;font-size:11px;color:var(--text-3);line-height:1.6;padding:8px 10px;background:rgba(6,212,240,.05);border-radius:6px;border-left:2px solid var(--cyan)">
+                <b style="color:var(--cyan)">行业基准</b>：耗材/猫砂尿垫 <b>2-4%</b> · 零食主粮 <b>3-6%</b> · 玩具配件 <b>5-9%</b> · 智能设备 <b>10-15%</b> · 灯管易碎件 <b>8-12%</b>
+              </div>
+              <div class="full" style="margin-top:6px">
+                <button class="btn primary" id="peCalc" style="width:100%"><i class="fa-solid fa-calculator"></i> 重新计算</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><div class="card-title"><span class="accent emerald"></span>真实毛利结构</div></div>
+            <div class="pe-row"><span class="lbl">售价</span><span class="val text-emerald" id="rPrice">¥18.90</span></div>
+            <div class="pe-row danger"><span class="lbl">- 拿货成本</span><span class="val" id="rCost">¥2.85</span></div>
+            <div class="pe-row danger"><span class="lbl">- 采购运费分摊</span><span class="val" id="rShipIn">¥0.30</span></div>
+            <div class="pe-row danger"><span class="lbl">- 包装+耗材</span><span class="val" id="rPack">¥0.30</span></div>
+            <div class="pe-row danger"><span class="lbl">- 发货运费</span><span class="val" id="rShipOut">¥3.50</span></div>
+            <div class="pe-row danger"><span class="lbl">- 平台扣点</span><span class="val" id="rFee">¥0.94 (5%)</span></div>
+            <div class="pe-row danger"><span class="lbl">- 退货损耗</span><span class="val" id="rReturn">¥0.12 (2.8%)</span></div>
+            <div class="pe-row danger"><span class="lbl">- 打包工时</span><span class="val" id="rLabor">¥0.80</span></div>
+            <div class="pe-row total"><span class="lbl">真实毛利</span><span class="val text-emerald" id="rNet">¥10.08</span></div>
+            <div class="pe-row"><span class="lbl">毛利率</span><span class="val text-emerald" id="rMargin">53.3%</span></div>
+            <div class="pe-row"><span class="lbl">月销 100 件可赚</span><span class="val text-emerald" id="r100">¥1008</span></div>
+            <div class="verdict" id="peVerdict"><div class="verdict-head"><i class="fa-solid fa-circle-check text-emerald"></i> 健康 · 可放心铺货</div>
+      <div class="text-2" style="font-size:12.5px;line-height:1.6">毛利率 53.3% 处于健康区间，月销 100 件可净赚 ¥1008。建议同步上架到 2-3 个店铺扩大销量。</div></div>
+          </div>
+        </div>
+
+        <!-- 优化建议 (动态) -->
+        <div class="card" style="margin-top:18px">
+          <div class="card-head"><div class="card-title"><span class="accent amber"></span>盈亏点反推 · 实时计算</div></div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+            <div style="padding:14px;background:rgba(6,212,240,.06);border-radius:12px;border:1px solid var(--border)">
+              <div class="text-3 mono" style="font-size:10px;letter-spacing:1px;text-transform:uppercase">保本售价</div>
+              <div class="num text-cyan" style="font-size:24px;margin:4px 0" id="rBreakeven">¥8.29</div>
+              <div class="text-2" style="font-size:11.5px" id="rBreakevenNote">低于此价开始亏损，最少卖到这个数</div>
+            </div>
+            <div style="padding:14px;background:rgba(245,166,35,.06);border-radius:12px;border:1px solid var(--border)">
+              <div class="text-3 mono" style="font-size:10px;letter-spacing:1px;text-transform:uppercase">健康售价 (30%毛利)</div>
+              <div class="num text-amber" style="font-size:24px;margin:4px 0" id="rHealthy">¥12.11</div>
+              <div class="text-2" style="font-size:11.5px">卖到这价以上，毛利率才 ≥ 30%</div>
+            </div>
+            <div style="padding:14px;background:rgba(16,185,129,.06);border-radius:12px;border:1px solid var(--border)">
+              <div class="text-3 mono" style="font-size:10px;letter-spacing:1px;text-transform:uppercase">当前售价相对位</div>
+              <div class="num text-emerald" style="font-size:24px;margin:4px 0" id="rPosition">+128%</div>
+              <div class="text-2" style="font-size:11.5px" id="rPositionNote">安全垫厚，价格抗压力强</div>
+            </div>
+            <div style="padding:14px;background:rgba(236,72,153,.06);border-radius:12px;border:1px solid var(--border)">
+              <div class="text-3 mono" style="font-size:10px;letter-spacing:1px;text-transform:uppercase">每单退货损耗</div>
+              <div class="num text-pink" style="font-size:24px;margin:4px 0" id="rRetLoss">¥0.12</div>
+              <div class="text-2" style="font-size:11.5px" id="rRetLossNote">退货按运费+30%报废算，非全损</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============== 8. 风险预警 ============== -->
+      <div class="page" id="page-risk">
+        <div class="card" style="margin-bottom:18px;padding:14px 18px;background:linear-gradient(90deg,rgba(244,63,94,.06),transparent);border-color:rgba(244,63,94,.25)">
+          <div style="display:flex;align-items:center;gap:10px"><i class="fa-solid fa-shield-halved text-rose"></i><span style="font-size:13px"><b class="text-rose">新手保护机制</b>: 系统监控全部 6 个货源平台 + 你的店铺动态，识别<b class="text-amber">资质红线 / 投诉高发款 / 节假日发货风险 / 价格异常</b>四类预警。</span></div>
+        </div>
+
+        <div class="risk-grid">
+          <div class="risk-card">
+            <h4><i class="fa-solid fa-ban text-rose"></i> 高危红线</h4>
+            <p>活体宠物（含猫狗仔/异宠/活体饲料），新手店铺资质不全，平台违规率 100%，强制下架。</p>
+            <div class="tag">触发 · 7 款被屏蔽</div>
+          </div>
+          <div class="risk-card warn">
+            <h4><i class="fa-solid fa-triangle-exclamation text-amber"></i> 退货高发款</h4>
+            <p>"自动喂食器（带摄像头）"近30天退货率 18.7%，主因 WiFi 不稳定 + 卡粮。建议替换为机械定时款。</p>
+            <div class="tag">关联订单 · 0 笔</div>
+          </div>
+          <div class="risk-card info">
+            <h4><i class="fa-solid fa-circle-info text-cyan"></i> 节假日警报</h4>
+            <p>清明假期 4/4-4/6 多家供应商停发，已购 PO003 静音跑轮可能延迟。已自动给买家发预告。</p>
+            <div class="tag">关联订单 · 3 笔</div>
+          </div>
+          <div class="risk-card">
+            <h4><i class="fa-solid fa-money-bill-trend-up text-rose"></i> 价格异常</h4>
+            <p>"猫薄荷球"突然从 ¥1.2 涨至 ¥3.8。检测原因: 头部工厂安全检查停产，建议切义乌购备用。</p>
+            <div class="tag">关联货盘 · 1 款</div>
+          </div>
+          <div class="risk-card warn">
+            <h4><i class="fa-solid fa-prescription-bottle text-amber"></i> 资质提醒</h4>
+            <p>主营宠粮需要《饲料生产许可证》，你目前未上传。先做粮类附属品（碗具等）规避。</p>
+            <div class="tag">距离合规 · 还差 1 证</div>
+          </div>
+          <div class="risk-card info">
+            <h4><i class="fa-solid fa-comments text-cyan"></i> 投诉关键词</h4>
+            <p>"漏粉""有异味"近期在尿垫品类频出，建议把"无尘""快递箱密封"写进详情页。</p>
+            <div class="tag">采集源 · 淘宝差评</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div class="card-title"><span class="accent pink"></span>红线产品库 · 新手禁碰清单</div></div>
+          <table class="ord-table">
+            <thead><tr><th>品类</th><th>原因</th><th>风险等级</th><th>替代方案</th><th>状态</th></tr></thead>
+            <tbody>
+              <tr><td>活体猫狗仔</td><td>需经营许可+检疫，纠纷重</td><td><span class="pill rose">红线</span></td><td>转做配套用品</td><td><span class="text-rose"><i class="fa-solid fa-ban"></i> 屏蔽</span></td></tr>
+              <tr><td>活体爬虫/守宫</td><td>运输死亡率高，平台限制</td><td><span class="pill rose">红线</span></td><td>转做爬箱/UVB设备</td><td><span class="text-rose"><i class="fa-solid fa-ban"></i> 屏蔽</span></td></tr>
+              <tr><td>品牌主粮 (皇家/比瑞吉等)</td><td>无授权，B2B采购也算窜货</td><td><span class="pill amber">高危</span></td><td>波奇代发授权款</td><td><span class="text-amber"><i class="fa-solid fa-triangle-exclamation"></i> 警示</span></td></tr>
+              <tr><td>处方粮 / 药品</td><td>需医疗资质</td><td><span class="pill rose">红线</span></td><td>普通保健品代销</td><td><span class="text-rose"><i class="fa-solid fa-ban"></i> 屏蔽</span></td></tr>
+              <tr><td>自动喂食器 (智能联网款)</td><td>退货率 15%+，售后重</td><td><span class="pill amber">慎选</span></td><td>机械定时款</td><td><span class="text-amber"><i class="fa-solid fa-triangle-exclamation"></i> 警示</span></td></tr>
+              <tr><td>仿名牌玩具</td><td>知识产权风险</td><td><span class="pill rose">红线</span></td><td>原创/无品牌款</td><td><span class="text-rose"><i class="fa-solid fa-ban"></i> 屏蔽</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============== 9. 供应商对话 ============== -->
+      <div class="page" id="page-chat">
+        <div class="chat-shell">
+          <div class="chat-side">
+            <div class="chat-filter">
+              <input type="text" placeholder="🔍 搜索供应商 / 平台...">
+            </div>
+            <div class="chat-list" id="chatList"><div class="chat-item active" data-id="0">
+        <div class="chat-ava"><i class="fab fa-alipay text-cyan"></i></div>
+        <div class="chat-meta">
+          <b>山东洁齿宠品工厂 <span class="online-dot"></span></b>
+          <span>1688.com · 样品免费，运费到付</span>
+        </div>
+      </div><div class="chat-item " data-id="1">
+        <div class="chat-ava"><i class="fab fa-alipay text-cyan"></i></div>
+        <div class="chat-meta">
+          <b>安徽爬宠设备厂 <span class="online-dot busy"></span></b>
+          <span>1688.com · 6个月寿命，替换灯管 ¥8</span>
+        </div>
+      </div><div class="chat-item " data-id="2">
+        <div class="chat-ava"><i class="fa-solid fa-city text-amber"></i></div>
+        <div class="chat-meta">
+          <b>义乌尾货宠品综合仓 <span class="online-dot"></span></b>
+          <span>义乌购 · 量大包邮 江浙沪</span>
+        </div>
+      </div><div class="chat-item " data-id="3">
+        <div class="chat-ava"><i class="fa-solid fa-globe text-emerald"></i></div>
+        <div class="chat-meta">
+          <b>Chinagoods 宠品专营 <span class="online-dot"></span></b>
+          <span>Chinagoods · 剑麻柱 ¥9.5/根</span>
+        </div>
+      </div><div class="chat-item " data-id="4">
+        <div class="chat-ava"><i class="fab fa-pagelines text-pink"></i></div>
+        <div class="chat-meta">
+          <b>多多批发宠品 <span class="online-dot"></span></b>
+          <span>多多批发 · 样品费 ¥5</span>
+        </div>
+      </div><div class="chat-item " data-id="5">
+        <div class="chat-ava"><i class="fa-solid fa-paw text-violet"></i></div>
+        <div class="chat-meta">
+          <b>波奇自营代发 <span class="online-dot"></span></b>
+          <span>波奇宠物 · 5-7折出货</span>
+        </div>
+      </div><div class="chat-item " data-id="6">
+        <div class="chat-ava"><i class="fa-solid fa-dog text-cyan"></i></div>
+        <div class="chat-meta">
+          <b>天元宠物 OEM <span class="online-dot busy"></span></b>
+          <span>天元宠物 · ¥12/个 起订500</span>
+        </div>
+      </div></div>
+          </div>
+          <div class="chat-main">
+            <div class="chat-head">
+              <div class="chat-ava" id="ckAva"><i class="fab fa-alipay text-cyan"></i></div>
+              <div class="chat-head-meta">
+                <b id="ckName">山东洁齿宠品工厂</b>
+                <span id="ckPlat">1688.com · <span class="online-dot "></span> 在线</span>
+              </div>
+              <div class="chat-head-actions">
+                <button class="icon-btn" title="询价模板"><i class="fa-solid fa-file-lines"></i></button>
+                <button class="icon-btn" title="下单"><i class="fa-solid fa-cart-shopping"></i></button>
+                <button class="icon-btn" title="标记"><i class="fa-regular fa-star"></i></button>
+              </div>
+            </div>
+            <div class="chat-body" id="chatBody"><div style="display:flex;flex-direction:column;align-items:flex-start">
+        <div class="msg in">您好，咨询洁齿水 500ml 的价格</div>
+        <div class="msg-time">10:22</div>
+      </div><div style="display:flex;flex-direction:column;align-items:flex-end">
+        <div class="msg out">洁齿水500ml ¥4.2/瓶，MOQ 500瓶</div>
+        <div class="msg-time">10:24</div>
+      </div><div style="display:flex;flex-direction:column;align-items:flex-start">
+        <div class="msg in">可以发样品看看吗？</div>
+        <div class="msg-time">10:28</div>
+      </div><div style="display:flex;flex-direction:column;align-items:flex-end">
+        <div class="msg out">样品免费，运费到付</div>
+        <div class="msg-time">10:30</div>
+      </div><div style="display:flex;flex-direction:column;align-items:flex-end">
+        <div class="msg out">另送配套包装盒效果图，您看下</div>
+        <div class="msg-time">10:30</div>
+      </div></div>
+            <div class="quick-asks">
+              <span class="text-3 mono" style="font-size:10px;letter-spacing:1px;align-self:center">快捷模板:</span>
+              <button class="quick-ask" data-text="这款最低多少？500件能拿什么价？">询底价</button>
+              <button class="quick-ask" data-text="可以发个样品吗？运费谁出？">要样品</button>
+              <button class="quick-ask" data-text="账期支持吗？多少天的？">谈账期</button>
+              <button class="quick-ask" data-text="批次合格证/质检报告能提供吗？">要资质</button>
+              <button class="quick-ask" data-text="一件代发支持吗？需要我提供什么？">代发</button>
+            </div>
+            <div class="chat-input">
+              <input type="text" id="chatInput" placeholder="询价 / 确认交期 / 退货政策...">
+              <button class="btn primary" id="sendBtn"><i class="fa-solid fa-paper-plane"></i> 发送</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============== 10. 订单管理 ============== -->
+      <div class="page" id="page-orders">
+        <div class="card" style="margin-bottom:16px;padding:14px 18px;background:linear-gradient(90deg,rgba(6,212,240,.06),transparent)">
+          <div style="display:flex;align-items:center;gap:10px"><i class="fa-solid fa-robot text-cyan"></i><span style="font-size:13px"><b>AI 订单管家</b>正在为你实时监控 <b class="text-cyan">5</b> 笔订单 · <b class="text-rose">1</b> 笔异常正跟进 · 下一个发货截止 <b class="text-amber mono">还有 4h 12m</b></span></div>
+        </div>
+
+        <div class="card">
+          <div class="filter-row">
+            <button class="tab active" data-st="all">全部 <span class="count">5</span></button>
+            <button class="tab" data-st="waitPay">待付款 <span class="count">1</span></button>
+            <button class="tab" data-st="waitShip">待发货 <span class="count">1</span></button>
+            <button class="tab" data-st="waitReceive">待收货 <span class="count">1</span></button>
+            <button class="tab" data-st="refund">退款处理 <span class="count">1</span></button>
+            <button class="tab" data-st="evaluate">待评价 <span class="count">1</span></button>
+            <div style="flex:1"></div>
+            <input type="text" placeholder="🔍 订单号/商品" style="width:180px">
+            <button class="btn"><i class="fa-solid fa-download"></i> 导出</button>
+          </div>
+
+          <table class="ord-table">
+            <thead><tr><th><input type="checkbox"></th><th>订单</th><th>单价×数量</th><th>金额</th><th>供应商</th><th>状态</th><th>下单时间</th><th>操作</th></tr></thead>
+            <tbody id="orderTbody"><tr>
+        <td><input type="checkbox"></td>
+        <td><div><b class="mono">PO001</b></div><div class="text-2" style="font-size:12px">益生菌洁齿水 500ml</div></td>
+        <td class="mono">¥19.9 × 2</td>
+        <td class="num text-amber">¥39.80</td>
+        <td class="text-2">山东洁齿宠品</td>
+        <td><span class="status-pill st-pay">待付款</span></td>
+        <td class="text-3 mono" style="font-size:11px">今天 10:24</td>
+        <td><button class="btn sm">处理</button></td>
+      </tr><tr>
+        <td><input type="checkbox"></td>
+        <td><div><b class="mono">PO002</b></div><div class="text-2" style="font-size:12px">纳米矿晶尿垫 50片</div></td>
+        <td class="mono">¥12.9 × 5</td>
+        <td class="num text-amber">¥64.50</td>
+        <td class="text-2">安徽爬宠设备厂</td>
+        <td><span class="status-pill st-ship">待发货</span></td>
+        <td class="text-3 mono" style="font-size:11px">今天 09:15</td>
+        <td><button class="btn sm">处理</button></td>
+      </tr><tr>
+        <td><input type="checkbox"></td>
+        <td><div><b class="mono">PO003</b></div><div class="text-2" style="font-size:12px">仓鼠静音跑轮 21cm</div></td>
+        <td class="mono">¥19.9 × 3</td>
+        <td class="num text-amber">¥59.70</td>
+        <td class="text-2">广东小宠用品</td>
+        <td><span class="status-pill st-recv">待收货</span></td>
+        <td class="text-3 mono" style="font-size:11px">4/03 14:22</td>
+        <td><button class="btn sm">处理</button></td>
+      </tr><tr>
+        <td><input type="checkbox"></td>
+        <td><div><b class="mono">PO004</b></div><div class="text-2" style="font-size:12px">智能饮水机套装</div></td>
+        <td class="mono">¥89 × 1</td>
+        <td class="num text-amber">¥89.00</td>
+        <td class="text-2">义乌尾货综合仓</td>
+        <td><span class="status-pill st-refund">退货处理</span></td>
+        <td class="text-3 mono" style="font-size:11px">4/01 18:40</td>
+        <td><button class="btn sm">处理</button></td>
+      </tr><tr>
+        <td><input type="checkbox"></td>
+        <td><div><b class="mono">PO005</b></div><div class="text-2" style="font-size:12px">舔食垫+酱膏套装</div></td>
+        <td class="mono">¥29.9 × 2</td>
+        <td class="num text-amber">¥59.80</td>
+        <td class="text-2">天元宠物</td>
+        <td><span class="status-pill st-eval">待评价</span></td>
+        <td class="text-3 mono" style="font-size:11px">3/30 11:08</td>
+        <td><button class="btn sm">处理</button></td>
+      </tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============== 11. 时效看板 ============== -->
+      <div class="page" id="page-sla">
+        <div class="card" style="margin-bottom:18px">
+          <div class="card-head"><div class="card-title"><span class="accent"></span>供应商时效综合评分</div><div class="card-sub">近30天数据 · 实时更新</div></div>
+          <div id="slaList"><div class="sla-row">
+        <div class="sla-name"><i class="fa-solid fa-industry text-2"></i> <span><b>山东洁齿宠品工厂</b><div class="text-3" style="font-size:11px">1688</div></span></div>
+        <div class="sla-metric"><small>响应</small><b class="text-cyan">15分钟</b></div>
+        <div class="sla-metric"><small>发货</small><b class="text-amber">24h</b></div>
+        <div class="sla-metric"><small>退换</small><b class="text-emerald">2-3天</b></div>
+        <div class="sla-metric"><small>评分</small><b>★ 4.7</b></div>
+        <div class="sla-grade">A</div>
+      </div><div class="sla-row">
+        <div class="sla-name"><i class="fa-solid fa-industry text-2"></i> <span><b>安徽爬宠设备厂</b><div class="text-3" style="font-size:11px">1688</div></span></div>
+        <div class="sla-metric"><small>响应</small><b class="text-cyan">10分钟</b></div>
+        <div class="sla-metric"><small>发货</small><b class="text-amber">12h</b></div>
+        <div class="sla-metric"><small>退换</small><b class="text-emerald">1天内</b></div>
+        <div class="sla-metric"><small>评分</small><b>★ 4.9</b></div>
+        <div class="sla-grade">A+</div>
+      </div><div class="sla-row">
+        <div class="sla-name"><i class="fa-solid fa-industry text-2"></i> <span><b>义乌尾货综合仓</b><div class="text-3" style="font-size:11px">义乌购</div></span></div>
+        <div class="sla-metric"><small>响应</small><b class="text-cyan">5分钟</b></div>
+        <div class="sla-metric"><small>发货</small><b class="text-amber">当天发</b></div>
+        <div class="sla-metric"><small>退换</small><b class="text-emerald">2-3天</b></div>
+        <div class="sla-metric"><small>评分</small><b>★ 4.6</b></div>
+        <div class="sla-grade">A</div>
+      </div><div class="sla-row">
+        <div class="sla-name"><i class="fa-solid fa-industry text-2"></i> <span><b>广东小宠用品</b><div class="text-3" style="font-size:11px">1688</div></span></div>
+        <div class="sla-metric"><small>响应</small><b class="text-cyan">30分钟</b></div>
+        <div class="sla-metric"><small>发货</small><b class="text-amber">48h</b></div>
+        <div class="sla-metric"><small>退换</small><b class="text-emerald">5-7天</b></div>
+        <div class="sla-metric"><small>评分</small><b>★ 3.8</b></div>
+        <div class="sla-grade b">B</div>
+      </div><div class="sla-row">
+        <div class="sla-name"><i class="fa-solid fa-industry text-2"></i> <span><b>天元宠物 OEM</b><div class="text-3" style="font-size:11px">天元</div></span></div>
+        <div class="sla-metric"><small>响应</small><b class="text-cyan">60分钟</b></div>
+        <div class="sla-metric"><small>发货</small><b class="text-amber">5天内</b></div>
+        <div class="sla-metric"><small>退换</small><b class="text-emerald">1-2天</b></div>
+        <div class="sla-metric"><small>评分</small><b>★ 4.8</b></div>
+        <div class="sla-grade">A</div>
+      </div><div class="sla-row">
+        <div class="sla-name"><i class="fa-solid fa-industry text-2"></i> <span><b>多多批发宠品</b><div class="text-3" style="font-size:11px">多多</div></span></div>
+        <div class="sla-metric"><small>响应</small><b class="text-cyan">120分钟</b></div>
+        <div class="sla-metric"><small>发货</small><b class="text-amber">3-5天</b></div>
+        <div class="sla-metric"><small>退换</small><b class="text-rose">不支持</b></div>
+        <div class="sla-metric"><small>评分</small><b>★ 3.2</b></div>
+        <div class="sla-grade c">C</div>
+      </div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+          <div class="card">
+            <div class="card-head"><div class="card-title"><span class="accent amber"></span>响应时效分布</div></div>
+            <canvas id="slaResp" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas>
+          </div>
+          <div class="card">
+            <div class="card-head"><div class="card-title"><span class="accent pink"></span>发货时效分布</div></div>
+            <canvas id="slaShip" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ============ 每日同行爆款 弹窗 ============ -->
+<div class="modal-overlay show" id="dailyModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="icon-box"><i class="fa-solid fa-fire"></i></div>
+      <div>
+        <div class="modal-title">今日同行爆款 · 抢先布货</div>
+        <div class="modal-sub" id="dailyDate">2026-05-15 · 抓取 6 平台 24h 销量 TOP</div>
+      </div>
+      <button class="modal-close" id="modalCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:13px;color:var(--text-2);line-height:1.75">
+        <i class="fa-solid fa-circle-info text-cyan"></i> 系统每天早 8 点抓取 <b class="text-cyan">1688 / 义乌购 / Chinagoods / 多多批发 / 波奇 / 天元</b> 六个平台的 24 小时实时销量榜，下面这几款是<b class="text-amber">最近 24 小时同行卖得最猛的</b>，建议提前布货——错过今天，又要再等一天。
+      </div>
+      <div class="hot-grid" id="hotGrid"><div class="hot-card">
+      <span class="hot-rank r1">1</span>
+      <div class="hot-emoji">🧻</div>
+      <div class="hot-body">
+        <div class="hot-name">纳米矿晶尿垫 50片</div>
+        <div class="hot-stats">
+          24h 卖出 <b>1,755</b> 件 · 7天合计 <b>10,425</b> 件<br>
+          货源 <b>义乌购</b> · 拿货 <b>¥2.65</b> · AI 评分 <b>88</b>
+        </div>
+        <div class="hot-add" data-pid="p01">+ 一键加入选品</div>
+      </div>
+    </div><div class="hot-card">
+      <span class="hot-rank r2">2</span>
+      <div class="hot-emoji">🦷</div>
+      <div class="hot-body">
+        <div class="hot-name">益生菌洁齿水 500ml</div>
+        <div class="hot-stats">
+          24h 卖出 <b>1,290</b> 件 · 7天合计 <b>7,670</b> 件<br>
+          货源 <b>1688</b> · 拿货 <b>¥4.20</b> · AI 评分 <b>82</b>
+        </div>
+        <div class="hot-add" data-pid="p02">+ 一键加入选品</div>
+      </div>
+    </div><div class="hot-card">
+      <span class="hot-rank r3">3</span>
+      <div class="hot-emoji">🍯</div>
+      <div class="hot-body">
+        <div class="hot-name">宠物舔食垫+酱膏套装</div>
+        <div class="hot-stats">
+          24h 卖出 <b>890</b> 件 · 7天合计 <b>4,620</b> 件<br>
+          货源 <b>多多批发</b> · 拿货 <b>¥4.70</b> · AI 评分 <b>90</b>
+        </div>
+        <div class="hot-add" data-pid="p04">+ 一键加入选品</div>
+      </div>
+    </div><div class="hot-card">
+      <span class="hot-rank r4">4</span>
+      <div class="hot-emoji">💧</div>
+      <div class="hot-body">
+        <div class="hot-name">智能饮水机滤芯 3片装</div>
+        <div class="hot-stats">
+          24h 卖出 <b>1,680</b> 件 · 7天合计 <b>9,180</b> 件<br>
+          货源 <b>义乌购</b> · 拿货 <b>¥1.80</b> · AI 评分 <b>92</b>
+        </div>
+        <div class="hot-add" data-pid="p07">+ 一键加入选品</div>
+      </div>
+    </div></div>
+    </div>
+    <div class="modal-foot">
+      <div style="font-size:12px;color:var(--text-3);flex:1"><i class="fa-solid fa-shield-halved"></i> 已为你过滤掉 <b style="color:var(--rose)">高风险 / 起订量过高 / 退货率&gt;15%</b> 的款</div>
+      <button class="btn" id="modalSkipBtn">稍后再看</button>
+      <button class="btn primary" id="modalAllBtn"><i class="fa-solid fa-bolt"></i> 全部加入选品列表</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= 页面切换 ================= */
+const crumbMap = {
+  dashboard:['总览看板','选品决策 · 今日实时'],
+  quickstart:['新手起步','7天跑通第一单'],
+  discover:['选品广场','全平台货品聚合'],
+  trend:['趋势雷达','热搜 × 季节 × 平台'],
+  matrix:['宠物矩阵','物种 × 货品 × 复购'],
+  compare:['跨平台比价','同款 6 平台横评'],
+  profit:['真实利润','含运费/扣点/退货率'],
+  risk:['风险预警','新手保护 · 红线监控'],
+  chat:['供应商对话','6 平台供应商整合'],
+  orders:['订单管理','AI 管家实时监控'],
+  sla:['时效看板','综合评分 · 30 天']
+};
+document.querySelectorAll('.nav-item').forEach(it=>{
+  it.addEventListener('click',()=>{
+    const id=it.getAttribute('data-page');
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    it.classList.add('active');
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page-'+id).classList.add('active');
+    const [t,s]=crumbMap[id];
+    document.getElementById('crumb').innerHTML = `${t}<small>· ${s}</small>`;
+    document.querySelector('.main').scrollTop=0;
+  });
+});
+
+/* 导航分组折叠/展开 */
+document.querySelectorAll('.nav-group-title').forEach(title=>{
+  title.addEventListener('click',()=>{
+    title.closest('.nav-group').classList.toggle('collapsed');
+  });
+});
+
+/* ================= 复购评分卡 ================= */
+const rpDb={
+  '猫窝':[72,18,'低频换新','中需','中价','稳定'],
+  '猫砂':[96,9,'快速消耗','刚需','低价','稳定'],
+  '尿垫':[88,15,'快速消耗','刚需','低价','稳定'],
+  '纳米矿晶尿垫':[88,15,'快速消耗','刚需','低价','稳定'],
+  '洁齿水':[84,20,'中速消耗','弱需','中价','稳定'],
+  '益生菌洁齿水':[84,20,'中速消耗','弱需','中价','稳定'],
+  '恒温箱':[76,180,'一次性大件','刚需','高价','季节性'],
+  '跑轮':[82,90,'轴承易损','刚需','低价','稳定'],
+  '酱膏':[91,12,'快速消耗','弱需','低价','稳定'],
+  '舔食垫':[79,30,'缓慢换新','弱需','中价','稳定'],
+  'UVB灯':[100,180,'必换耗材','刚需','中价','稳定']
+};
+function rpFind(kw){
+  for(const k in rpDb){ if(kw.includes(k)) return rpDb[k]; }
+  return [70,30,'未识别','中需','中价','稳定'];
+}
+function setGauge(score){
+  const c=2*Math.PI*38;
+  document.getElementById('gaugeArc').setAttribute('stroke-dashoffset', c - c*score/100);
+  document.getElementById('gaugeScore').innerHTML = score + '<span class="text-2" style="font-size:18px">%</span>';
+}
+document.getElementById('rpAnalyze')?.addEventListener('click',()=>{
+  const kw=document.getElementById('rpInput').value || '纳米矿晶尿垫';
+  const [s]=rpFind(kw); setGauge(s);
+});
+
+/* ================= 趋势 Chart ================= */
+const chartTextColor='#9aa8c1', chartGridColor='rgba(31,42,68,.5)';
+Chart.defaults.color=chartTextColor;
+Chart.defaults.font.family="'DM Sans','Noto Serif SC',sans-serif";
+Chart.defaults.font.size=11;
+
+const days30 = Array.from({length:30}, (_,i)=>`${4}/${(i+1).toString().padStart(2,'0')}`);
+function noisyTrend(base, amp, drift){
+  return days30.map((_,i)=> Math.round(base + i*drift + Math.sin(i*0.6)*amp + Math.random()*amp*0.4));
+}
+new Chart(document.getElementById('trendChart').getContext('2d'),{
+  type:'line',
+  data:{
+    labels:days30,
+    datasets:[
+      {label:'益生菌洁齿水', data:noisyTrend(120,18,1.2), borderColor:'#06d4f0', backgroundColor:'rgba(6,212,240,.12)', fill:true, tension:.35, borderWidth:2, pointRadius:0},
+      {label:'纳米矿晶尿垫', data:noisyTrend(180,22,1.8), borderColor:'#f5a623', backgroundColor:'rgba(245,166,35,.1)', fill:true, tension:.35, borderWidth:2, pointRadius:0},
+      {label:'舔食垫+酱膏', data:noisyTrend(90,14,0.6), borderColor:'#ec4899', backgroundColor:'rgba(236,72,153,.08)', fill:true, tension:.35, borderWidth:2, pointRadius:0}
+    ]
+  },
+  options:{
+    plugins:{legend:{position:'top',align:'end',labels:{boxWidth:8,boxHeight:8,usePointStyle:true,pointStyle:'circle'}}},
+    scales:{
+      x:{grid:{display:false},ticks:{maxTicksLimit:8}},
+      y:{grid:{color:chartGridColor},beginAtZero:true}
+    },
+    interaction:{mode:'index',intersect:false}
+  }
+});
+
+/* ================= Trend Page Charts ================= */
+const hotChartCtx=document.getElementById('hotChart');
+if(hotChartCtx){
+  new Chart(hotChartCtx.getContext('2d'),{
+    type:'bar',
+    data:{
+      labels:['蜥蜴恒温箱','静音跑轮','剑麻爬架','除臭香珠','洁齿水','舔食垫','UVB灯管','防误食碗'],
+      datasets:[{
+        label:'近7日热度增幅 (%)',
+        data:[210,178,143,124,98,87,76,62],
+        backgroundColor:(ctx)=>{
+          const v=ctx.parsed.y; return v>150?'#f43f5e':v>100?'#f5a623':'#06d4f0';
+        },
+        borderRadius:6
+      }]
+    },
+    options:{plugins:{legend:{display:false}},scales:{y:{grid:{color:chartGridColor}},x:{grid:{display:false}}}}
+  });
+}
+const seasonChartCtx=document.getElementById('seasonChart');
+if(seasonChartCtx){
+  new Chart(seasonChartCtx.getContext('2d'),{
+    type:'line',
+    data:{
+      labels:['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+      datasets:[
+        {label:'恒温箱', data:[95,88,70,55,40,30,28,32,55,75,90,98], borderColor:'#f43f5e', tension:.4, fill:false, pointRadius:0, borderWidth:2},
+        {label:'防暑冰垫', data:[10,15,30,55,85,98,100,95,72,40,20,8], borderColor:'#06d4f0', tension:.4, fill:false, pointRadius:0, borderWidth:2},
+        {label:'尿垫(全年)', data:[80,82,85,88,90,88,85,87,90,92,90,85], borderColor:'#10b981', tension:.4, fill:false, pointRadius:0, borderWidth:2}
+      ]
+    },
+    options:{plugins:{legend:{position:'top',align:'end',labels:{boxWidth:8,boxHeight:8,usePointStyle:true}}},scales:{y:{grid:{color:chartGridColor},beginAtZero:true,max:120,ticks:{stepSize:25}},x:{grid:{display:false}}}}
+  });
+}
+
+/* ================= Trend Top10 Table ================= */
+const trendData=[
+  {kw:'蜥蜴恒温箱平替',src:'小红书',gain:340,sku:'27款',rec:5},
+  {kw:'tiktok #reptile',src:'TikTok',gain:210,sku:'19款',rec:5},
+  {kw:'仓鼠跑轮静音',src:'小红书',gain:178,sku:'12款',rec:4},
+  {kw:'猫爬架剑麻柱',src:'抖音',gain:143,sku:'8款',rec:4},
+  {kw:'除臭香珠',src:'1688',gain:124,sku:'40+款',rec:5},
+  {kw:'宠物饮水机滤芯',src:'淘宝',gain:98,sku:'15款',rec:4},
+  {kw:'舔食垫慢食',src:'小红书',gain:87,sku:'9款',rec:3},
+  {kw:'UVB灯管 5.0',src:'1688',gain:76,sku:'6款',rec:4},
+  {kw:'防误食慢食碗',src:'抖音',gain:62,sku:'14款',rec:3},
+  {kw:'宠物冷垫夏季',src:'淘宝',gain:54,sku:'22款',rec:3}
+];
+const trendTbody=document.getElementById('trendTbody');
+if(trendTbody){
+  trendData.forEach((t,i)=>{
+    const stars='★'.repeat(t.rec)+'☆'.repeat(5-t.rec);
+    const cls = t.gain>150?'rose':t.gain>100?'amber':'cyan';
+    trendTbody.insertAdjacentHTML('beforeend',
+      `<tr>
+        <td class="mono text-3">#${(i+1).toString().padStart(2,'0')}</td>
+        <td><b>${t.kw}</b></td>
+        <td><span class="pill muted">${t.src}</span></td>
+        <td><span class="pill ${cls}">+${t.gain}%</span></td>
+        <td class="text-2">${t.sku}</td>
+        <td class="text-amber" style="letter-spacing:2px">${stars}</td>
+        <td><button class="btn sm">去比价</button></td>
+      </tr>`
+    );
+  });
+}
+
+/* ================= Discover Products ================= */
+const discProducts=[
+  {id:'p01',emoji:'🧻',name:'纳米矿晶尿垫 50片',price:2.65,plat:'义乌购',sold:'30天 8.2万件',tag:'profit',tagText:'高利润',hotToday:true,sales7:[1180,1320,1450,1290,1610,1820,1755],ship:18,shipDelta:'快于平台 32%',after:97.2,afterDelta:'优于均值',reply:8,replyDelta:'90% 5分钟内',aiScore:88,aiVerdict:'strong',aiVerdictText:'强烈推荐',aiPoints:['消耗快、复购周期 15 天，新手起家首选','义乌购拿货价 ¥2.65 比 1688 低 18%，价格洼地','7 天销量上升 49%，处于上升期','售后纠纷率 2.8% 低于行业 5% 均值'],competitors:[{name:'喵小宠批发行',sales:'12.4 万',aov:'8.8',rate:'4.92',plat:'抖音小店',loc:'义乌',play:'9.9 包邮 / 福袋引流'},{name:'毛孩子日杂铺',sales:'9.8 万',aov:'12.5',rate:'4.85',plat:'拼多多',loc:'金华',play:'秒杀 + 满减'},{name:'宠物耗材一件代发',sales:'7.6 万',aov:'15.8',rate:'4.78',plat:'淘宝',loc:'广州',play:'套装组合提客单'},{name:'萌宠物批发',sales:'5.5 万',aov:'10.2',rate:'4.71',plat:'1688',loc:'义乌',play:'阶梯价 / 大箱发货'},{name:'喵爪日常',sales:'4.2 万',aov:'9.5',rate:'4.65',plat:'快手',loc:'临沂',play:'直播秒杀 + 5片试用装'}]},
+
+  {id:'p02',emoji:'🦷',name:'益生菌洁齿水 500ml',price:4.2,plat:'1688',sold:'30天 5.6万件',tag:'hot',tagText:'爆款',hotToday:true,sales7:[820,910,950,1080,1240,1380,1290],ship:24,shipDelta:'符合平台标准',after:94.5,afterDelta:'瓶身渗漏 1.2%',reply:14,replyDelta:'店主在线 9-22h',aiScore:82,aiVerdict:'recommend',aiVerdictText:'推荐',aiPoints:['月销 5.6 万，铺货标品，竞争激烈但需求稳','单瓶售价 ¥15-19，毛利空间 ¥7-10','痛点：物流抛货成本高，需注意打包','建议主推 2 瓶套装提客单价'],competitors:[{name:'宠安洁齿专营',sales:'8.9 万',aov:'29.8',rate:'4.88',plat:'天猫',loc:'广州',play:'套装+品牌背书'},{name:'毛孩口腔护理',sales:'6.2 万',aov:'19.9',rate:'4.81',plat:'抖音小店',loc:'东莞',play:'达人种草+短视频'},{name:'萌兽日常',sales:'4.8 万',aov:'16.8',rate:'4.72',plat:'淘宝',loc:'金华',play:'9.9 引流 + 老客复购'},{name:'喵汪小铺',sales:'3.5 万',aov:'22.5',rate:'4.68',plat:'拼多多',loc:'佛山',play:'百亿补贴 + 单瓶低价'},{name:'宠物保健站',sales:'2.8 万',aov:'25.0',rate:'4.62',plat:'京东',loc:'上海',play:'品牌联名 + 自营物流'}]},
+
+  {id:'p03',emoji:'🐹',name:'静音跑轮 21cm',price:4.2,plat:'1688',sold:'30天 4.1万件',tag:'hot',tagText:'爆款',hotToday:false,sales7:[580,620,650,710,780,820,790],ship:30,shipDelta:'体积大 慢于平均',after:91.8,afterDelta:'噪音投诉 4.5%',reply:18,replyDelta:'回复中规中矩',aiScore:75,aiVerdict:'recommend',aiVerdictText:'推荐',aiPoints:['小宠垂类刚需，竞争小，新手友好','单价 ¥15-22 售价空间大，毛利 ¥10+','痛点：噪音问题易投诉，需选轴承款','建议搭配仓鼠笼配件做组合销售'],competitors:[{name:'仓鼠小窝',sales:'2.8 万',aov:'18.8',rate:'4.86',plat:'淘宝',loc:'扬州',play:'垂直小宠店铺定位'},{name:'萌宠跑轮专卖',sales:'2.1 万',aov:'25.5',rate:'4.79',plat:'抖音小店',loc:'义乌',play:'静音演示视频'},{name:'仓鼠日杂百货',sales:'1.5 万',aov:'15.8',rate:'4.71',plat:'拼多多',loc:'金华',play:'低价引流 9.9'},{name:'小宠之家',sales:'1.2 万',aov:'22.0',rate:'4.66',plat:'1688',loc:'宁波',play:'B 端铺货 + 大批量'},{name:'喵小宠批发行',sales:'8500',aov:'19.9',rate:'4.62',plat:'快手',loc:'临沂',play:'直播带货'}]},
+
+  {id:'p04',emoji:'🍯',name:'宠物舔食垫+酱膏套装',price:4.7,plat:'多多批发',sold:'30天 3.8万件',tag:'profit',tagText:'高利润',hotToday:true,sales7:[450,520,580,650,720,810,890],ship:22,shipDelta:'多多自营快',after:95.6,afterDelta:'酱膏漏液 1.8%',reply:12,replyDelta:'店主回复积极',aiScore:90,aiVerdict:'strong',aiVerdictText:'强烈推荐',aiPoints:['7 天销量爆涨 98%，趋势向上','套装拉客单价至 ¥25-35，毛利 60%+','小红书爆款类目，年轻铲屎官刚需','建议先小批量 50 件测款再追加'],competitors:[{name:'喵享时光',sales:'5.2 万',aov:'32.8',rate:'4.91',plat:'抖音小店',loc:'广州',play:'网红种草+饲养视频'},{name:'毛孩子的小确幸',sales:'3.8 万',aov:'28.5',rate:'4.85',plat:'天猫',loc:'杭州',play:'品牌包装+套装组合'},{name:'宠物零食舔食专营',sales:'2.6 万',aov:'25.0',rate:'4.78',plat:'淘宝',loc:'东莞',play:'sku 矩阵 / 多口味'},{name:'萌宠互动馆',sales:'1.9 万',aov:'22.0',rate:'4.69',plat:'拼多多',loc:'金华',play:'低价单品引流'},{name:'宠物日杂铺',sales:'1.2 万',aov:'19.9',rate:'4.63',plat:'快手',loc:'佛山',play:'9.9 直播秒杀'}]},
+
+  {id:'p05',emoji:'🦎',name:'爬宠智能恒温箱',price:28,plat:'1688',sold:'30天 1.2万件',tag:'new',tagText:'新品',hotToday:false,sales7:[120,135,148,162,185,210,228],ship:48,shipDelta:'大件 需注意物流',after:88.5,afterDelta:'温控故障 3.2%',reply:25,replyDelta:'技术问题需详询',aiScore:72,aiVerdict:'recommend',aiVerdictText:'推荐',aiPoints:['客单价 ¥120-180，毛利空间 ¥60+','爬宠垂类小众但精准，复购低但首单高','痛点：售前咨询繁重，需准备 FAQ','建议主营两栖类社群引流，先做 5-10 件试水'],competitors:[{name:'爬虫世界',sales:'8500',aov:'168',rate:'4.89',plat:'淘宝',loc:'广州',play:'专业知识+晒单社群'},{name:'两爬之家',sales:'6200',aov:'188',rate:'4.83',plat:'天猫',loc:'深圳',play:'品牌+终身保修'},{name:'萌宠爬虫馆',sales:'4500',aov:'138',rate:'4.71',plat:'抖音小店',loc:'东莞',play:'饲养教学视频导购'},{name:'蜥蜴守宫专卖',sales:'2800',aov:'155',rate:'4.68',plat:'拼多多',loc:'佛山',play:'低价百亿补贴'},{name:'爬宠饲养装备',sales:'1900',aov:'175',rate:'4.62',plat:'1688',loc:'东莞',play:'B 端批发 + 工厂直供'}]},
+
+  {id:'p06',emoji:'🐱',name:'剑麻猫抓柱 60cm',price:9.5,plat:'Chinagoods',sold:'30天 2.8万件',tag:'hot',tagText:'爆款',hotToday:false,sales7:[380,420,440,460,490,510,520],ship:36,shipDelta:'体积大需走专线',after:93.2,afterDelta:'掉麻屑投诉 3.8%',reply:20,replyDelta:'客服响应一般',aiScore:78,aiVerdict:'recommend',aiVerdictText:'推荐',aiPoints:['猫垂类经典款，需求稳定全年无淡季','售价 ¥35-55，毛利 ¥18-25','痛点：物流成本占售价 15%-22%','建议挑选 60cm 一规格主推，减少 SKU'],competitors:[{name:'喵星人家居',sales:'4.5 万',aov:'48.5',rate:'4.86',plat:'天猫',loc:'广州',play:'家居场景+整套搭配'},{name:'猫咪爬架专卖',sales:'3.2 万',aov:'42.0',rate:'4.81',plat:'淘宝',loc:'佛山',play:'尺寸矩阵+定制服务'},{name:'萌宠家居',sales:'2.4 万',aov:'38.8',rate:'4.74',plat:'抖音小店',loc:'东莞',play:'场景视频+使用展示'},{name:'毛孩子日杂铺',sales:'1.8 万',aov:'35.5',rate:'4.66',plat:'拼多多',loc:'金华',play:'9.9 单品引流'},{name:'宠物家居生活',sales:'1.2 万',aov:'45.0',rate:'4.61',plat:'1688',loc:'义乌',play:'B 端批发为主'}]},
+
+  {id:'p07',emoji:'💧',name:'智能饮水机滤芯 3片装',price:1.8,plat:'义乌购',sold:'30天 6.1万件',tag:'profit',tagText:'高利润',hotToday:true,sales7:[920,1050,1180,1280,1450,1620,1680],ship:16,shipDelta:'小件次日达',after:96.8,afterDelta:'极少售后',reply:6,replyDelta:'5分钟内必回',aiScore:92,aiVerdict:'strong',aiVerdictText:'强烈推荐',aiPoints:['月耗品 + 配件依赖，复购周期 30 天','售价 ¥9.9-15，毛利率 70%+','7 天销量稳定增长 22%，处于稳态','建议绑定饮水机销售，做后端订阅'],competitors:[{name:'宠安净水站',sales:'10.2 万',aov:'18.8',rate:'4.92',plat:'抖音小店',loc:'广州',play:'订阅复购 + 每月配送'},{name:'毛孩子配件铺',sales:'7.8 万',aov:'15.5',rate:'4.86',plat:'天猫',loc:'东莞',play:'品牌通用 + 多机型适配'},{name:'宠物配件批发',sales:'5.5 万',aov:'12.5',rate:'4.78',plat:'淘宝',loc:'义乌',play:'兼容多品牌做大全'},{name:'喵汪小铺',sales:'3.6 万',aov:'10.8',rate:'4.72',plat:'拼多多',loc:'金华',play:'低价+大包装'},{name:'萌宠批发',sales:'2.4 万',aov:'14.5',rate:'4.65',plat:'1688',loc:'宁波',play:'B 端铺货 / 工厂直供'}]},
+
+  {id:'p08',emoji:'🌿',name:'除臭香珠 1kg',price:0.32,plat:'义乌购',sold:'30天 2.4万件',tag:'new',tagText:'尾货',hotToday:false,sales7:[280,310,340,360,390,420,440],ship:14,shipDelta:'快递包邮',after:89.2,afterDelta:'香味偏淡投诉 5.5%',reply:22,replyDelta:'部分工厂回复慢',aiScore:65,aiVerdict:'watch',aiVerdictText:'观望',aiPoints:['尾货价 ¥0.32/kg 极低，但毛利绝对额小','售价天花板 ¥9.9 难突破','痛点：被同行价格战拖累','建议作为引流款，搭配高客单产品出货'],competitors:[{name:'宠物日杂百货',sales:'3.8 万',aov:'9.9',rate:'4.78',plat:'拼多多',loc:'金华',play:'9.9 引流款'},{name:'喵汪批发行',sales:'2.6 万',aov:'12.5',rate:'4.72',plat:'淘宝',loc:'义乌',play:'多规格组合'},{name:'毛孩子日用',sales:'1.8 万',aov:'15.5',rate:'4.65',plat:'抖音小店',loc:'东莞',play:'短视频导购'},{name:'萌宠生活馆',sales:'1.2 万',aov:'8.8',rate:'4.58',plat:'快手',loc:'临沂',play:'直播低价秒杀'},{name:'宠物去味专营',sales:'8500',aov:'18.8',rate:'4.55',plat:'1688',loc:'佛山',play:'B 端铺货'}]},
+
+  {id:'p09',emoji:'🍖',name:'磨牙肉条 100g',price:1.5,plat:'多多批发',sold:'30天 9.8万件',tag:'hot',tagText:'爆款',hotToday:true,sales7:[2200,2350,2480,2620,2810,3050,3180],ship:20,shipDelta:'多多自营仓快',after:94.1,afterDelta:'变质投诉 2.8%',reply:10,replyDelta:'客服在线及时',aiScore:85,aiVerdict:'strong',aiVerdictText:'强烈推荐',aiPoints:['犬类零食刚需，月销近 10 万件','售价 ¥6.9-12.9，毛利率 55%-65%','痛点：食品类资质必备，需检验报告','建议先备好食品流通许可，再大批量进货'],competitors:[{name:'毛孩子零食铺',sales:'15.2 万',aov:'25.5',rate:'4.91',plat:'抖音小店',loc:'广州',play:'狗子开箱视频 + 测评'},{name:'宠物食品专营',sales:'11.8 万',aov:'22.0',rate:'4.85',plat:'天猫',loc:'青岛',play:'品牌+检验报告全公开'},{name:'萌宠零食工坊',sales:'8.6 万',aov:'18.8',rate:'4.78',plat:'淘宝',loc:'东莞',play:'多口味矩阵 SKU'},{name:'汪星人厨房',sales:'5.5 万',aov:'15.5',rate:'4.71',plat:'拼多多',loc:'佛山',play:'9.9 引流+大包装'},{name:'宠物食品批发',sales:'3.8 万',aov:'12.5',rate:'4.65',plat:'1688',loc:'潍坊',play:'B 端 / 食品厂直供'}]},
+
+  {id:'p10',emoji:'🐰',name:'兔粮 五谷果蔬 1kg',price:6.8,plat:'天元宠物',sold:'30天 5800件',tag:'',tagText:'',hotToday:false,sales7:[160,175,180,168,195,210,205],ship:28,shipDelta:'重量大物流稍慢',after:92.5,afterDelta:'破袋率 3.5%',reply:18,replyDelta:'专业宠物店服务',aiScore:68,aiVerdict:'watch',aiVerdictText:'观望',aiPoints:['小宠垂类，月销稳定但天花板低','售价 ¥18-28，毛利 ¥8-15','痛点：保质期短，库存压力大','建议直接做天元 1 件代发，零库存模式'],competitors:[{name:'萌兔之家',sales:'8500',aov:'25.5',rate:'4.85',plat:'淘宝',loc:'扬州',play:'小宠垂直店铺'},{name:'兔粮专营店',sales:'6200',aov:'28.8',rate:'4.78',plat:'天猫',loc:'广州',play:'品牌专营+营养报告'},{name:'小宠日杂铺',sales:'4500',aov:'22.0',rate:'4.71',plat:'抖音小店',loc:'东莞',play:'兔友社群运营'},{name:'毛孩子粮食铺',sales:'2800',aov:'18.5',rate:'4.65',plat:'拼多多',loc:'金华',play:'低价大包装'},{name:'宠物粮批发',sales:'1900',aov:'15.5',rate:'4.58',plat:'1688',loc:'青岛',play:'B 端铺货'}]},
+
+  {id:'p11',emoji:'💡',name:'UVB 5.0 灯管',price:12,plat:'1688',sold:'30天 4200件',tag:'profit',tagText:'高利润',hotToday:false,sales7:[110,128,142,138,165,180,188],ship:32,shipDelta:'易碎件需特殊包装',after:90.8,afterDelta:'破损投诉 4.2%',reply:24,replyDelta:'技术咨询多 回复慢',aiScore:80,aiVerdict:'recommend',aiVerdictText:'推荐',aiPoints:['爬宠刚需配件，售价 ¥35-60','毛利 ¥20-40 / 支，毛利率高','痛点：易碎包装成本高，破损率 4%','建议气泡柱+EPE 棉强化包装'],competitors:[{name:'爬虫世界',sales:'4500',aov:'58.8',rate:'4.88',plat:'淘宝',loc:'广州',play:'专业知识储备'},{name:'两栖爬宠专营',sales:'3200',aov:'52.0',rate:'4.82',plat:'天猫',loc:'深圳',play:'品牌+原厂正品'},{name:'守宫蜥蜴馆',sales:'2400',aov:'45.5',rate:'4.75',plat:'抖音小店',loc:'东莞',play:'光照配置教学'},{name:'爬宠装备站',sales:'1500',aov:'42.0',rate:'4.68',plat:'1688',loc:'东莞',play:'工厂直供'},{name:'萌宠爬虫',sales:'980',aov:'38.5',rate:'4.62',plat:'拼多多',loc:'佛山',play:'低价 + 套装'}]},
+
+  {id:'p12',emoji:'🦜',name:'鹦鹉啃咬玩具 5件装',price:6.5,plat:'义乌购',sold:'30天 1.1万件',tag:'',tagText:'',hotToday:false,sales7:[280,310,295,340,365,380,395],ship:24,shipDelta:'轻泡件正常',after:91.2,afterDelta:'掉色投诉 3.8%',reply:15,replyDelta:'店主回复积极',aiScore:73,aiVerdict:'recommend',aiVerdictText:'推荐',aiPoints:['鸟类垂类小众，竞争压力小','5 件装拉客单 ¥25-40，毛利 ¥15-25','痛点：染色安全资质需备','建议挑选植物染色款，强调安全卖点'],competitors:[{name:'鹦鹉之家',sales:'2800',aov:'38.8',rate:'4.85',plat:'淘宝',loc:'广州',play:'鸟友社群运营'},{name:'萌宠鸟类专营',sales:'2100',aov:'35.5',rate:'4.78',plat:'天猫',loc:'东莞',play:'品牌+安全认证'},{name:'毛孩子日杂',sales:'1500',aov:'28.0',rate:'4.71',plat:'抖音小店',loc:'金华',play:'鹦鹉玩耍视频导购'},{name:'宠物玩具批发',sales:'980',aov:'25.5',rate:'4.65',plat:'拼多多',loc:'佛山',play:'低价矩阵'},{name:'鸟类用品工厂',sales:'650',aov:'22.0',rate:'4.58',plat:'1688',loc:'义乌',play:'B 端铺货'}]}
+];
+
+/* ============ 选品列表 ============ */
+const selectionList = new Set();
+function refreshSelCount(){
+  document.getElementById('selCount').textContent = selectionList.size;
+}
+function addToSelection(id){
+  selectionList.add(id);
+  refreshSelCount();
+}
+
+/* ============ 选品广场 渲染 ============ */
+const discGrid=document.getElementById('discGrid');
+if(discGrid){
+  discProducts.forEach(p=>{
+    discGrid.insertAdjacentHTML('beforeend',
+      `<div class="prod" data-pid="${p.id}">
+        <div class="prod-img">${p.emoji}${p.tag?`<span class="prod-tag ${p.tag}">${p.tagText}</span>`:''}</div>
+        <div class="prod-body">
+          <div class="prod-name">${p.name}</div>
+          <div class="prod-meta"><span class="prod-price">¥${p.price.toFixed(2)}</span><span class="pill muted">${p.plat}</span></div>
+        </div>
+        <div class="prod-foot"><span>${p.sold}</span><span class="text-cyan">看数据 →</span></div>
+      </div>`
+    );
+  });
+  // 点击商品 → 跳转详情
+  discGrid.addEventListener('click', e=>{
+    const card = e.target.closest('.prod');
+    if(!card) return;
+    const pid = card.getAttribute('data-pid');
+    openProductDetail(pid);
+  });
+}
+
+/* ============ 商品详情看板 ============ */
+let pdChartInstance = null;
+function openProductDetail(pid){
+  const p = discProducts.find(x=>x.id===pid);
+  if(!p) return;
+
+  // 头部
+  document.getElementById('pdImg').textContent = p.emoji;
+  document.getElementById('pdName').textContent = p.name;
+  document.getElementById('pdPlat').textContent = p.plat;
+  document.getElementById('pdPlatform').textContent = '货源平台 · ' + p.plat;
+  document.getElementById('pdSku').textContent = 'SKU-' + p.id.toUpperCase();
+  document.getElementById('pdPrice').textContent = p.price.toFixed(2);
+  const pdTagEl = document.getElementById('pdTag');
+  if(p.tag){ pdTagEl.style.display=''; pdTagEl.textContent=p.tagText; pdTagEl.className='pill '+ (p.tag==='hot'?'rose':p.tag==='profit'?'amber':'cyan'); }
+  else { pdTagEl.style.display='none'; }
+
+  // KPI
+  const total7 = p.sales7.reduce((a,b)=>a+b,0);
+  const avg = Math.round(total7/7);
+  const first3 = p.sales7.slice(0,3).reduce((a,b)=>a+b,0);
+  const last3 = p.sales7.slice(-3).reduce((a,b)=>a+b,0);
+  const wow = (((last3-first3)/first3)*100).toFixed(0);
+  const peakIdx = p.sales7.indexOf(Math.max(...p.sales7));
+  const peakLbl = ['D-6','D-5','D-4','D-3','D-2','昨天','今天'][peakIdx];
+  const variance = Math.sqrt(p.sales7.reduce((a,b)=>a+Math.pow(b-avg,2),0)/7)/avg;
+  const stability = variance<0.10?'极稳':variance<0.20?'平稳':'波动';
+
+  document.getElementById('pdSales7').innerHTML = total7.toLocaleString() + '<small>件</small>';
+  document.getElementById('pdSalesDelta').innerHTML = (wow>=0?'<span class="text-emerald">↑ ':'<span class="text-rose">↓ ')+Math.abs(wow)+'% 周环比</span>';
+  document.getElementById('pdShip').innerHTML = p.ship + '<small>小时</small>';
+  document.getElementById('pdShipDelta').textContent = p.shipDelta;
+  document.getElementById('pdAfter').innerHTML = p.after + '<small>%</small>';
+  document.getElementById('pdAfterDelta').textContent = p.afterDelta;
+  document.getElementById('pdReply').innerHTML = p.reply + '<small>分钟</small>';
+  document.getElementById('pdReplyDelta').textContent = p.replyDelta;
+
+  document.getElementById('pdAvgDay').textContent = avg.toLocaleString();
+  document.getElementById('pdPeakDay').textContent = peakLbl;
+  document.getElementById('pdGrowth').textContent = (wow>=0?'+':'') + wow + '%';
+  document.getElementById('pdConsistency').textContent = stability;
+  const consistencyEl = document.getElementById('pdConsistency');
+  consistencyEl.className = stability==='极稳'?'text-emerald':stability==='平稳'?'text-cyan':'text-amber';
+
+  // AI
+  document.getElementById('pdAiScore').textContent = p.aiScore;
+  document.getElementById('pdAiBar').style.width = p.aiScore + '%';
+  const verdictEl = document.getElementById('pdAiVerdict');
+  verdictEl.textContent = p.aiVerdictText;
+  verdictEl.className = 'pd-ai-verdict ' + p.aiVerdict;
+  const pts = document.getElementById('pdAiPoints');
+  pts.innerHTML = p.aiPoints.map(x=>`<li>${x}</li>`).join('');
+
+  // 竞品表
+  const tb = document.getElementById('pdCompTbody');
+  tb.innerHTML = p.competitors.map((c,i)=>{
+    const rankCls = i===0?'r1':i===1?'r2':i===2?'r3':'';
+    return `<tr>
+      <td><span class="pd-rank-badge ${rankCls}">${i+1}</span></td>
+      <td><b>${c.name}</b></td>
+      <td><b class="text-cyan">${c.sales}</b> 件</td>
+      <td>¥${c.aov}</td>
+      <td><span class="text-amber">★ ${c.rate}</span></td>
+      <td><span class="pill muted">${c.plat}</span></td>
+      <td>${c.loc}</td>
+      <td style="color:var(--text-2)">${c.play}</td>
+    </tr>`;
+  }).join('');
+
+  // 销量曲线
+  if(pdChartInstance) pdChartInstance.destroy();
+  const ctx = document.getElementById('pdSalesChart').getContext('2d');
+  pdChartInstance = new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:['6天前','5天前','4天前','3天前','2天前','昨天','今天'],
+      datasets:[{
+        label:'商家销量(件)',
+        data:p.sales7,
+        borderColor:'#06d4f0',
+        backgroundColor:'rgba(6,212,240,.12)',
+        fill:true,tension:.35,borderWidth:2.5,
+        pointBackgroundColor:'#06d4f0',pointRadius:4,pointHoverRadius:6
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,resizeDelay:150,
+      animation:{duration:600},
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#7a8a9e',font:{size:10}}},
+        y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#7a8a9e',font:{size:10}}}
+      }
+    }
+  });
+
+  // 详情页加入选品按钮
+  document.getElementById('pdAddBtn').onclick = ()=>{
+    addToSelection(p.id);
+    const btn = document.getElementById('pdAddBtn');
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> 已加入选品';
+    btn.classList.remove('primary');
+    setTimeout(()=>{
+      btn.innerHTML = '<i class="fa-solid fa-plus"></i> 加入选品';
+      btn.classList.add('primary');
+    },1500);
+  };
+
+  // 切到详情页
+  document.querySelectorAll('.page').forEach(pg=>pg.classList.remove('active'));
+  document.getElementById('page-prod-detail').classList.add('active');
+  document.getElementById('crumb').innerHTML = `选品广场 / ${p.name}<small>· 实时数据看板</small>`;
+  document.querySelector('.main').scrollTop=0;
+}
+
+function goBackToDiscover(){
+  document.querySelectorAll('.page').forEach(pg=>pg.classList.remove('active'));
+  document.getElementById('page-discover').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelector('.nav-item[data-page="discover"]').classList.add('active');
+  document.getElementById('crumb').innerHTML = '选品广场<small>· AI 智能筛选 · 你的等级 LV2</small>';
+}
+
+/* ============ 每日同行爆款 弹窗 ============ */
+function renderDailyHot(){
+  const hots = discProducts.filter(x=>x.hotToday).slice(0,4);
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  document.getElementById('dailyDate').innerHTML = `${dateStr} · 抓取 6 平台 24h 销量 TOP`;
+  const grid = document.getElementById('hotGrid');
+  grid.innerHTML = hots.map((p,i)=>{
+    const total7 = p.sales7.reduce((a,b)=>a+b,0);
+    return `<div class="hot-card">
+      <span class="hot-rank r${i+1}">${i+1}</span>
+      <div class="hot-emoji">${p.emoji}</div>
+      <div class="hot-body">
+        <div class="hot-name">${p.name}</div>
+        <div class="hot-stats">
+          24h 卖出 <b>${p.sales7[6].toLocaleString()}</b> 件 · 7天合计 <b>${total7.toLocaleString()}</b> 件<br>
+          货源 <b>${p.plat}</b> · 拿货 <b>¥${p.price.toFixed(2)}</b> · AI 评分 <b>${p.aiScore}</b>
+        </div>
+        <div class="hot-add" data-pid="${p.id}">+ 一键加入选品</div>
+      </div>
+    </div>`;
+  }).join('');
+  grid.querySelectorAll('.hot-add').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      const pid = btn.getAttribute('data-pid');
+      addToSelection(pid);
+      btn.classList.add('added');
+      btn.textContent = '已加入选品';
+    });
+  });
+}
+function openDailyModal(){ document.getElementById('dailyModal').classList.add('show'); }
+function closeDailyModal(){ document.getElementById('dailyModal').classList.remove('show'); }
+document.getElementById('modalCloseBtn').addEventListener('click', closeDailyModal);
+document.getElementById('modalSkipBtn').addEventListener('click', closeDailyModal);
+document.getElementById('modalAllBtn').addEventListener('click', ()=>{
+  discProducts.filter(x=>x.hotToday).slice(0,4).forEach(p=>addToSelection(p.id));
+  document.querySelectorAll('#hotGrid .hot-add').forEach(b=>{b.classList.add('added');b.textContent='已加入选品';});
+  setTimeout(closeDailyModal, 600);
+});
+document.getElementById('dailyModal').addEventListener('click', e=>{
+  if(e.target.id==='dailyModal') closeDailyModal();
+});
+document.getElementById('selBadge').addEventListener('click', ()=>{
+  if(selectionList.size===0){ alert('选品列表还是空的，先去选品广场逛逛吧～'); return; }
+  alert('当前选品列表：'+ Array.from(selectionList).map(id=>discProducts.find(p=>p.id===id).name).join('、'));
+});
+
+// 进站延迟 600ms 弹出，避免遮挡首屏渲染
+renderDailyHot();
+refreshSelCount();
+setTimeout(openDailyModal, 600);
+
+/* ================= Profit Calculator ================= */
+function calcProfit(){
+  const cost=parseFloat(document.getElementById('peCost').value)||0;
+  const price=parseFloat(document.getElementById('pePrice').value)||0;
+  const shipIn=parseFloat(document.getElementById('peShipIn').value)||0;
+  const pack=parseFloat(document.getElementById('pePack').value)||0;
+  const shipOut=parseFloat(document.getElementById('peShipOut').value)||0;
+  const feePct=parseFloat(document.getElementById('peFee').value)||0;
+  const retPct=parseFloat(document.getElementById('peReturn').value)||0;
+  const labor=parseFloat(document.getElementById('peLabor').value)||0;
+
+  /* === 真实退货损耗 ===
+     原算法错误: 退货=售价全损 → 导致退货 8% 就吃掉 ¥1+ 的毛利
+     新算法: 退货损耗 = 退货率 × (反向运费 + (拿货+包装)×30%报废率)
+     - 反向运费按发货运费同等计 (买家自付一半的话再×0.5，这里保守按全额)
+     - 30% 报废率: 实测耗材类返修后 70% 可再卖出，损失仅 30% */
+  const fee = price*feePct/100;
+  const retLossPerReturn = shipOut + (cost+pack)*0.3;
+  const ret = retLossPerReturn * retPct/100;
+  const net = price - cost - shipIn - pack - shipOut - fee - ret - labor;
+  const margin = price>0 ? (net/price*100) : 0;
+
+  /* === 保本售价反推 ===
+     net=0 时: price×(1-fee%) = cost + shipIn + pack + shipOut + labor + ret
+     注: 新公式里 ret 不依赖 price, 因此可线性求解 */
+  const fixedCost = cost + shipIn + pack + shipOut + labor + ret;
+  const breakeven = feePct<100 ? fixedCost/(1-feePct/100) : fixedCost;
+  // 30% 毛利的健康售价: price×(1-fee%) - fixedCost = price×0.3
+  // → price×(1-fee%-0.3) = fixedCost
+  const healthyDenom = (1-feePct/100-0.3);
+  const healthy = healthyDenom>0 ? fixedCost/healthyDenom : breakeven*1.5;
+  const position = breakeven>0 ? ((price-breakeven)/breakeven*100) : 0;
+
+  document.getElementById('rPrice').innerText = `¥${price.toFixed(2)}`;
+  document.getElementById('rCost').innerText = `¥${cost.toFixed(2)}`;
+  document.getElementById('rShipIn').innerText = `¥${shipIn.toFixed(2)}`;
+  document.getElementById('rPack').innerText = `¥${pack.toFixed(2)}`;
+  document.getElementById('rShipOut').innerText = `¥${shipOut.toFixed(2)}`;
+  document.getElementById('rFee').innerText = `¥${fee.toFixed(2)} (${feePct}%)`;
+  document.getElementById('rReturn').innerText = `¥${ret.toFixed(2)} (${retPct}%)`;
+  document.getElementById('rLabor').innerText = `¥${labor.toFixed(2)}`;
+  document.getElementById('rNet').innerText = `${net<0?'-':''}¥${Math.abs(net).toFixed(2)}`;
+  document.getElementById('rMargin').innerText = `${margin.toFixed(1)}%`;
+  document.getElementById('r100').innerText = `${net<0?'-':''}¥${Math.abs(net*100).toFixed(0)}`;
+
+  document.getElementById('rBreakeven').innerText = `¥${breakeven.toFixed(2)}`;
+  document.getElementById('rHealthy').innerText = `¥${healthy.toFixed(2)}`;
+  document.getElementById('rPosition').innerText = `${position>=0?'+':''}${position.toFixed(0)}%`;
+  document.getElementById('rRetLoss').innerText = `¥${ret.toFixed(2)}`;
+
+  // 着色三色逻辑
+  const rNetEl=document.getElementById('rNet');
+  const rMarginEl=document.getElementById('rMargin');
+  const r100El=document.getElementById('r100');
+  const cls = margin>=30 ? 'text-emerald' : margin>=15 ? 'text-amber' : margin>=0 ? 'text-pink' : 'text-rose';
+  rNetEl.className = 'val ' + cls;
+  rMarginEl.className = 'val ' + cls;
+  r100El.className = 'val ' + cls;
+
+  // 位置色
+  const posEl = document.getElementById('rPosition');
+  posEl.className = 'num ' + (position>=50?'text-emerald':position>=20?'text-amber':position>=0?'text-pink':'text-rose');
+  document.getElementById('rPositionNote').innerText = position>=50?'安全垫厚，价格抗压力强':position>=20?'尚可，但盯紧同行价格战':position>=0?'仅勉强保本，不建议入场':'已在亏损区，立即调整';
+
+  const v=document.getElementById('peVerdict');
+  if(net < 0){
+    v.className='verdict bad';
+    v.innerHTML=`<div class="verdict-head"><i class="fa-solid fa-circle-xmark"></i> 亏损 · 这是亏本生意</div>
+      <div class="text-2" style="font-size:12.5px;line-height:1.6">每件倒亏 ¥${Math.abs(net).toFixed(2)}。建议：① 售价提至保本价 <b class="text-cyan">¥${breakeven.toFixed(2)}</b> 以上 ② 谈低发货运费 ③ 组合套装拉客单价摊薄物流</div>`;
+  } else if(net < 1){
+    v.className='verdict warn';
+    v.innerHTML=`<div class="verdict-head"><i class="fa-solid fa-triangle-exclamation"></i> 微利 · 不抗波动</div>
+      <div class="text-2" style="font-size:12.5px;line-height:1.6">每件只赚 ¥${net.toFixed(2)}，一笔退货+一笔投诉就回本。建议把售价提到 <b class="text-amber">¥${healthy.toFixed(2)}</b> 拿到 30% 毛利。</div>`;
+  } else if(margin < 30){
+    v.className='verdict';
+    v.style.borderColor='rgba(245,166,35,.3)';
+    v.style.background='linear-gradient(135deg,rgba(245,166,35,.06),transparent)';
+    v.innerHTML=`<div class="verdict-head" style="color:var(--amber)"><i class="fa-solid fa-circle-half-stroke"></i> 正常 · 新手起步可接受</div>
+      <div class="text-2" style="font-size:12.5px;line-height:1.6">每件 ¥${net.toFixed(2)}，毛利率 ${margin.toFixed(1)}%。月销 100 件净赚 ¥${(net*100).toFixed(0)}。可入场，但同行打价格战时容易被挤掉。</div>`;
+  } else {
+    v.className='verdict';
+    v.style.borderColor='';
+    v.style.background='';
+    v.innerHTML=`<div class="verdict-head"><i class="fa-solid fa-circle-check text-emerald"></i> 健康 · 可放心铺货</div>
+      <div class="text-2" style="font-size:12.5px;line-height:1.6">毛利率 ${margin.toFixed(1)}% 处于健康区间，月销 100 件可净赚 ¥${(net*100).toFixed(0)}。建议同步上架到 2-3 个店铺扩大销量。</div>`;
+  }
+}
+document.getElementById('peCalc')?.addEventListener('click', calcProfit);
+document.getElementById('peSelect')?.addEventListener('change',(e)=>{
+  // 新 8 字段 preset: cost,retail,shipOut,pack,fee%,return%,labor,shipIn
+  const parts = e.target.value.split(',').map(parseFloat);
+  if(parts.length<8) return;
+  const [c,p,so,pk,fee,ret,lab,si] = parts;
+  document.getElementById('peCost').value = c;
+  document.getElementById('pePrice').value = p;
+  document.getElementById('peShipOut').value = so;
+  document.getElementById('pePack').value = pk;
+  document.getElementById('peFee').value = fee;
+  document.getElementById('peReturn').value = ret;
+  document.getElementById('peLabor').value = lab;
+  document.getElementById('peShipIn').value = si;
+  calcProfit();
+});
+// 任何输入改变实时重算
+['peCost','pePrice','peShipIn','pePack','peShipOut','peFee','peReturn','peLabor'].forEach(id=>{
+  document.getElementById(id)?.addEventListener('input', calcProfit);
+});
+calcProfit();
+
+/* ================= Supplier Chat ================= */
+const platforms={
+  '1688':{ico:'<i class="fab fa-alipay text-cyan"></i>',name:'1688.com'},
+  'yiwu':{ico:'<i class="fa-solid fa-city text-amber"></i>',name:'义乌购'},
+  'cg':{ico:'<i class="fa-solid fa-globe text-emerald"></i>',name:'Chinagoods'},
+  'pdd':{ico:'<i class="fab fa-pagelines text-pink"></i>',name:'多多批发'},
+  'boqi':{ico:'<i class="fa-solid fa-paw text-violet"></i>',name:'波奇宠物'},
+  'ty':{ico:'<i class="fa-solid fa-dog text-cyan"></i>',name:'天元宠物'}
+};
+const suppliers=[
+  {id:0,plat:'1688',name:'山东洁齿宠品工厂',online:'在线',last:'样品免费，运费到付',msgs:[
+    {in:1,t:'您好，咨询洁齿水 500ml 的价格',time:'10:22'},
+    {in:0,t:'洁齿水500ml ¥4.2/瓶，MOQ 500瓶',time:'10:24'},
+    {in:1,t:'可以发样品看看吗？',time:'10:28'},
+    {in:0,t:'样品免费，运费到付',time:'10:30'},
+    {in:0,t:'另送配套包装盒效果图，您看下',time:'10:30'}
+  ]},
+  {id:1,plat:'1688',name:'安徽爬宠设备厂',online:'忙碌',last:'6个月寿命，替换灯管 ¥8',msgs:[
+    {in:0,t:'恒温箱 ¥28/台，50 台起',time:'09:15'},
+    {in:1,t:'UVB 灯管寿命多久？',time:'09:20'},
+    {in:0,t:'6个月寿命，替换灯管 ¥8',time:'09:22'}
+  ]},
+  {id:2,plat:'yiwu',name:'义乌尾货宠品综合仓',online:'在线',last:'量大包邮 江浙沪',msgs:[
+    {in:0,t:'除臭香珠尾货 ¥0.28/包',time:'09:00'},
+    {in:1,t:'运费什么政策？',time:'09:30'},
+    {in:0,t:'量大包邮 江浙沪',time:'09:35'}
+  ]},
+  {id:3,plat:'cg',name:'Chinagoods 宠品专营',online:'在线',last:'剑麻柱 ¥9.5/根',msgs:[
+    {in:0,t:'猫爬架源头工厂',time:'昨天'},
+    {in:1,t:'剑麻柱什么价？',time:'昨天'},
+    {in:0,t:'剑麻柱 ¥9.5/根',time:'昨天'}
+  ]},
+  {id:4,plat:'pdd',name:'多多批发宠品',online:'在线',last:'样品费 ¥5',msgs:[
+    {in:0,t:'宠物湿巾 ¥0.9/包',time:'11:00'},
+    {in:1,t:'有样品吗？',time:'11:05'},
+    {in:0,t:'样品费 ¥5',time:'11:08'}
+  ]},
+  {id:5,plat:'boqi',name:'波奇自营代发',online:'在线',last:'5-7折出货',msgs:[
+    {in:0,t:'品牌粮一件代发',time:'昨天'},
+    {in:1,t:'利润空间多少？',time:'昨天'},
+    {in:0,t:'5-7折出货',time:'昨天'}
+  ]},
+  {id:6,plat:'ty',name:'天元宠物 OEM',online:'忙碌',last:'¥12/个 起订500',msgs:[
+    {in:0,t:'猫窝大货定制',time:'今天'},
+    {in:1,t:'拿货价多少？',time:'今天'},
+    {in:0,t:'¥12/个 起订500',time:'今天'}
+  ]}
+];
+let curSup=0;
+function renderChatList(){
+  const box=document.getElementById('chatList'); if(!box) return;
+  box.innerHTML='';
+  suppliers.forEach(s=>{
+    const p=platforms[s.plat];
+    const dotCls = s.online==='忙碌' ? 'online-dot busy' : 'online-dot';
+    box.insertAdjacentHTML('beforeend',
+      `<div class="chat-item ${curSup===s.id?'active':''}" data-id="${s.id}">
+        <div class="chat-ava">${p.ico}</div>
+        <div class="chat-meta">
+          <b>${s.name} <span class="${dotCls}"></span></b>
+          <span>${p.name} · ${s.last}</span>
+        </div>
+      </div>`
+    );
+  });
+  document.querySelectorAll('.chat-item').forEach(it=>it.addEventListener('click',()=>{
+    curSup=parseInt(it.getAttribute('data-id'));
+    renderChatList(); renderChat();
+  }));
+}
+function renderChat(){
+  const s=suppliers[curSup]; if(!s) return;
+  const p=platforms[s.plat];
+  document.getElementById('ckAva').innerHTML=p.ico;
+  document.getElementById('ckName').innerText=s.name;
+  document.getElementById('ckPlat').innerHTML=`${p.name} · <span class="online-dot ${s.online==='忙碌'?'busy':''}"></span> ${s.online}`;
+  const body=document.getElementById('chatBody'); body.innerHTML='';
+  s.msgs.forEach(m=>{
+    body.insertAdjacentHTML('beforeend',
+      `<div style="display:flex;flex-direction:column;align-items:${m.in?'flex-start':'flex-end'}">
+        <div class="msg ${m.in?'in':'out'}">${m.t}</div>
+        <div class="msg-time">${m.time}</div>
+      </div>`
+    );
+  });
+  body.scrollTop=body.scrollHeight;
+}
+function sendMsg(text){
+  if(!text.trim()) return;
+  const t=new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
+  suppliers[curSup].msgs.push({in:0,t:text,time:t});
+  renderChat();
+  setTimeout(()=>{
+    let reply='收到，稍后核实回复您。';
+    if(text.includes('价')||text.includes('多少')) reply='可以谈，量大再优惠 5-8%。';
+    else if(text.includes('样品')) reply='样品可发，运费到付，发样品费 ¥5（量产后退）。';
+    else if(text.includes('账期')) reply='新合作不支持账期，3次合作后可谈 15 天。';
+    else if(text.includes('质检')||text.includes('合格')) reply='第三方质检报告齐全，发您看下。';
+    else if(text.includes('代发')) reply='支持一件代发，需要您提供发货清单 + 包装样式。';
+    suppliers[curSup].msgs.push({in:1,t:reply,time:new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})});
+    renderChat();
+  },700);
+}
+document.getElementById('sendBtn')?.addEventListener('click',()=>{
+  const i=document.getElementById('chatInput'); sendMsg(i.value); i.value='';
+});
+document.getElementById('chatInput')?.addEventListener('keypress',(e)=>{
+  if(e.key==='Enter'){const i=e.target; sendMsg(i.value); i.value='';}
+});
+document.querySelectorAll('.quick-ask').forEach(b=>{
+  b.addEventListener('click',()=>{ document.getElementById('chatInput').value=b.getAttribute('data-text'); });
+});
+renderChatList(); renderChat();
+
+/* ================= Orders ================= */
+const orderData=[
+  {id:'PO001',sku:'益生菌洁齿水 500ml',price:19.9,qty:2,seller:'山东洁齿宠品',status:'waitPay',st:'待付款',time:'今天 10:24'},
+  {id:'PO002',sku:'纳米矿晶尿垫 50片',price:12.9,qty:5,seller:'安徽爬宠设备厂',status:'waitShip',st:'待发货',time:'今天 09:15'},
+  {id:'PO003',sku:'仓鼠静音跑轮 21cm',price:19.9,qty:3,seller:'广东小宠用品',status:'waitReceive',st:'待收货',time:'4/03 14:22'},
+  {id:'PO004',sku:'智能饮水机套装',price:89,qty:1,seller:'义乌尾货综合仓',status:'refund',st:'退货处理',time:'4/01 18:40'},
+  {id:'PO005',sku:'舔食垫+酱膏套装',price:29.9,qty:2,seller:'天元宠物',status:'evaluate',st:'待评价',time:'3/30 11:08'}
+];
+function statusPill(s,t){
+  const map={waitPay:'st-pay',waitShip:'st-ship',waitReceive:'st-recv',refund:'st-refund',evaluate:'st-eval'};
+  return `<span class="status-pill ${map[s]}">${t}</span>`;
+}
+function renderOrders(filter='all'){
+  const tb=document.getElementById('orderTbody'); if(!tb) return;
+  tb.innerHTML='';
+  orderData.filter(o=>filter==='all'||o.status===filter).forEach(o=>{
+    tb.insertAdjacentHTML('beforeend',
+      `<tr>
+        <td><input type="checkbox"></td>
+        <td><div><b class="mono">${o.id}</b></div><div class="text-2" style="font-size:12px">${o.sku}</div></td>
+        <td class="mono">¥${o.price} × ${o.qty}</td>
+        <td class="num text-amber">¥${(o.price*o.qty).toFixed(2)}</td>
+        <td class="text-2">${o.seller}</td>
+        <td>${statusPill(o.status,o.st)}</td>
+        <td class="text-3 mono" style="font-size:11px">${o.time}</td>
+        <td><button class="btn sm">处理</button></td>
+      </tr>`
+    );
+  });
+}
+document.querySelectorAll('#page-orders .tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('#page-orders .tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    renderOrders(t.getAttribute('data-st'));
+  });
+});
+renderOrders();
+
+/* ================= SLA ================= */
+const slaData=[
+  {name:'山东洁齿宠品工厂',plat:'1688',resp:15,respU:'分钟',ship:24,shipU:'h',ret:'2-3天',score:4.7,grade:'A'},
+  {name:'安徽爬宠设备厂',plat:'1688',resp:10,respU:'分钟',ship:12,shipU:'h',ret:'1天内',score:4.9,grade:'A+'},
+  {name:'义乌尾货综合仓',plat:'义乌购',resp:5,respU:'分钟',ship:'当天',shipU:'发',ret:'2-3天',score:4.6,grade:'A'},
+  {name:'广东小宠用品',plat:'1688',resp:30,respU:'分钟',ship:48,shipU:'h',ret:'5-7天',score:3.8,grade:'B'},
+  {name:'天元宠物 OEM',plat:'天元',resp:60,respU:'分钟',ship:'5天',shipU:'内',ret:'1-2天',score:4.8,grade:'A'},
+  {name:'多多批发宠品',plat:'多多',resp:120,respU:'分钟',ship:'3-5天',shipU:'',ret:'不支持',score:3.2,grade:'C'}
+];
+function renderSLA(){
+  const box=document.getElementById('slaList'); if(!box) return;
+  box.innerHTML='';
+  slaData.forEach(s=>{
+    const gradeCls = s.grade==='C'?'sla-grade c':s.grade==='B'?'sla-grade b':'sla-grade';
+    box.insertAdjacentHTML('beforeend',
+      `<div class="sla-row">
+        <div class="sla-name"><i class="fa-solid fa-industry text-2"></i> <span><b>${s.name}</b><div class="text-3" style="font-size:11px">${s.plat}</div></span></div>
+        <div class="sla-metric"><small>响应</small><b class="text-cyan">${s.resp}${s.respU}</b></div>
+        <div class="sla-metric"><small>发货</small><b class="text-amber">${typeof s.ship==='number'?s.ship+s.shipU:s.ship+s.shipU}</b></div>
+        <div class="sla-metric"><small>退换</small><b class="${s.ret==='不支持'?'text-rose':'text-emerald'}">${s.ret}</b></div>
+        <div class="sla-metric"><small>评分</small><b>★ ${s.score}</b></div>
+        <div class="${gradeCls}">${s.grade}</div>
+      </div>`
+    );
+  });
+}
+renderSLA();
+
+const slaRespCtx=document.getElementById('slaResp');
+if(slaRespCtx){
+  new Chart(slaRespCtx.getContext('2d'),{
+    type:'doughnut',
+    data:{labels:['5分钟内','30分钟内','1小时内','超过1小时'],datasets:[{data:[35,40,18,7],backgroundColor:['#10b981','#06d4f0','#f5a623','#f43f5e'],borderWidth:0}]},
+    options:{cutout:'62%',plugins:{legend:{position:'right',labels:{boxWidth:10,boxHeight:10,usePointStyle:true,pointStyle:'circle'}}}}
+  });
+}
+const slaShipCtx=document.getElementById('slaShip');
+if(slaShipCtx){
+  new Chart(slaShipCtx.getContext('2d'),{
+    type:'doughnut',
+    data:{labels:['当天发货','24h内','48h内','超过48h'],datasets:[{data:[42,33,18,7],backgroundColor:['#10b981','#06d4f0','#f5a623','#f43f5e'],borderWidth:0}]},
+    options:{cutout:'62%',plugins:{legend:{position:'right',labels:{boxWidth:10,boxHeight:10,usePointStyle:true,pointStyle:'circle'}}}}
+  });
+}
+
+/* ================= 信号刷新 ================= */
+document.getElementById('refreshSignals')?.addEventListener('click',()=>{
+  const news=[
+    {type:'hot',ico:'fab fa-tiktok',title:'TikTok #catshow 猫秀',meta:'欧美市场 · 一周',delta:'+267%'},
+    {type:'amber',ico:'fa-solid fa-snowflake',title:'冬季宠物毛毯订单激增',meta:'淘宝 · 北方区',delta:'+312%'},
+    {type:'',ico:'fa-solid fa-graduation-cap',title:'毕业季 大学生独居宠物',meta:'小红书 · 5月预热',delta:'+89%'},
+    {type:'hot',ico:'fa-solid fa-mug-hot',title:'撸猫咖啡馆同款用品',meta:'抖音 · 一二线城市',delta:'+198%'}
+  ];
+  const s=news[Math.floor(Math.random()*news.length)];
+  const box=document.getElementById('signalBox');
+  box.insertAdjacentHTML('afterbegin',
+    `<div class="signal ${s.type}">
+      <div class="signal-ico"><i class="${s.ico}"></i></div>
+      <div class="signal-body"><div class="signal-title">${s.title}</div><div class="signal-meta">${s.meta} · 刚刚</div></div>
+      <div class="signal-delta">${s.delta}</div>
+    </div>`
+  );
+  while(box.children.length>5) box.removeChild(box.lastChild);
+});
+
+</script>
+
+
+</body></html>
